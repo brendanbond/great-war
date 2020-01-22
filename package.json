@@ -1,0 +1,8 @@
+{
+  "name": "great-war",
+  "version": "0.0.1",
+  "description": "A deck-building chess game.",
+  "main": "index.js",
+  "author": "Brendan and Andrew Bond",
+  "license": "MIT"
+}
