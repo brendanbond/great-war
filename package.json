@@ -2,7 +2,10 @@
   "name": "great-war",
   "version": "0.0.1",
   "description": "A deck-building chess game.",
-  "main": "index.js",
   "author": "Brendan and Andrew Bond",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1",
+    "morgan": "^1.9.1"
+  }
 }
