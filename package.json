@@ -8,5 +8,19 @@
     "express": "^4.17.1",
     "morgan": "^1.9.1",
     "socket.io": "^2.3.0"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "husky": "^4.2.1",
+    "jest": "^25.1.0",
+    "pretty-quick": "^2.0.1",
+    "prettier": ">=1.8.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
   }
 }

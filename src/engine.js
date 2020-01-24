@@ -1,4 +1,4 @@
-function engine() {
+module.exports = (function engine() {
   /* engine constants */
   const BLACK = "b";
   const WHITE = "w";
@@ -179,6 +179,6 @@ function engine() {
       throw new Error("Move not valid.");
     }
   };
-}
 
-module.exports = engine;
+  return { BLACK };
+})();
