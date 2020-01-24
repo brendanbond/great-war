@@ -189,5 +189,9 @@ module.exports = (function engine() {
     }
   };
 
-  return {};
+  return {
+    getBoardState,
+    possibleMoves,
+    move
+  };
 })();
