@@ -27,17 +27,20 @@ function engine() {
     cards: [],
     opening: true,
     captures: [],
-    castling: false
+    castling: false,
+    inCheck: false
   };
 
   let black = {
     cards: [],
     opening: true,
     captures: [],
-    castling: false
+    castling: false,
+    inCheck: false
   };
 
   const Pawn = {
+    id: PAWN,
     moves: [[0, 1]],
     attacks: [
       [1, 1],
@@ -50,17 +53,8 @@ function engine() {
   };
 
   const King = {
+    id: KING,
     moves: [
-      [0, 1],
-      [1, 0],
-      [1, 1],
-      [0, -1],
-      [-1, 0],
-      [-1, -1],
-      [1, -1],
-      [-1, 1]
-    ],
-    attacks: [
       [0, 1],
       [1, 0],
       [1, 1],
@@ -79,8 +73,8 @@ function engine() {
   /* engine functions */
   const possibleMoves = (piece, x, y) => {
     /* if the game is opening, add possible openings */
-    let opens = [];
-    if (opening) {
+    if (piece.opens && opening) {
+      let opens = [];
       for (open of piece.opens) {
         /* check that we're still on the board */
         if (
@@ -108,17 +102,20 @@ function engine() {
       }
     }
 
-    /* add in possible attacks */
-    let attacks = [];
-    for (attack of piece.attacks) {
-      /* check that we're still on the board */
-      if (
-        x + attack[0] >= 0 &&
-        x + attack[0] < board[y].length &&
-        y + attack[1] >= 0 &&
-        y + attack[1] < board.length
-      ) {
-        attacks.push([x + attack[0], y + attack[1]]);
+    /* add in possible attacks if applicable */
+    if (piece.attacks) {
+      let attacks = [];
+      for (attack of piece.attacks) {
+        /* check that we're still on the board and that we're only attacking occupied squares */
+        if (
+          x + attack[0] >= 0 &&
+          x + attack[0] < board[y].length &&
+          y + attack[1] >= 0 &&
+          y + attack[1] < board.length &&
+          board[x + attack[0]][y + attack[1]] != EMPTY
+        ) {
+          attacks.push([x + attack[0], y + attack[1]]);
+        }
       }
     }
 
@@ -128,6 +125,51 @@ function engine() {
       moves: moves,
       attacks: attacks
     };
+  };
+
+  /* validate a move */
+  const validateMove = (piece, x, y, destX, destY) => {
+    /* check that the move is valid */
+    let validMove = false;
+    possibleMoves = possibleMoves(piece, x, y);
+    if (possibleMoves.opens && opening) {
+      for (open of possibleMoves.opens) {
+        if ([destX, destY] == open) {
+          validMove = true;
+          break;
+        }
+      }
+    }
+
+    for (move of possibleMoves.moves) {
+      if ([destX, destY] == move) {
+        validMove = true;
+        break;
+      }
+    }
+
+    if (possibleMoves.attacks && board[destX][destY] != EMPTY) {
+      for (attack of possibleMoves.attacks) {
+        if ([destX, destY] == attack) {
+          validMove = true;
+          break;
+        }
+      }
+    }
+
+    return validMove;
+  };
+
+  /* execute a move */
+  const move = (player, piece, x, y, destX, destY) => {
+    if (validateMove(piece, x, y, destX, destY)) {
+      board[x][y] = EMPTY;
+      /* TODO: this is probably not the best way to handle attacks */
+      if (board[destX][destY] != EMPTY) {
+        player.captures.push(board[destX][destY]);
+      }
+      board[destX][destY] = piece.id;
+    }
   };
 }
 
