@@ -70,6 +70,8 @@ module.exports = (function engine() {
 
   /* engine functions */
 
+  /* get the board state */
+
   /* calculate an array of possible moves */
   const possibleMoves = (piece, x, y) => {
     /* if the game is opening, add possible openings if applicable (i.e. pawns) */
@@ -180,5 +182,5 @@ module.exports = (function engine() {
     }
   };
 
-  return { BLACK };
+  return {};
 })();
