@@ -27,7 +27,6 @@ function engine() {
     cards: [],
     opening: true,
     captures: [],
-    castling: false,
     inCheck: false
   };
 
@@ -35,7 +34,6 @@ function engine() {
     cards: [],
     opening: true,
     captures: [],
-    castling: false,
     inCheck: false
   };
 
@@ -72,7 +70,7 @@ function engine() {
 
   /* engine functions */
   const possibleMoves = (piece, x, y) => {
-    /* if the game is opening, add possible openings */
+    /* if the game is opening, add possible openings if applicable (i.e. pawns) */
     if (piece.opens && opening) {
       let opens = [];
       for (open of piece.opens) {
@@ -169,6 +167,14 @@ function engine() {
         player.captures.push(board[destX][destY]);
       }
       board[destX][destY] = piece.id;
+      if (turn == WHITE) {
+        turn = BLACK;
+      } else {
+        turn = WHITE;
+      }
+    } else {
+      /* TODO: I'm not really clear on error checking and how we should handle */
+      throw new Error("Move not valid.");
     }
   };
 }
