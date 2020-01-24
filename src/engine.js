@@ -71,6 +71,9 @@ module.exports = (function engine() {
   /* engine functions */
 
   /* get the board state */
+  const getBoardState = () => {
+    return board;
+  };
 
   /* calculate an array of possible moves */
   const possibleMoves = (piece, x, y) => {
