@@ -23,7 +23,7 @@ const io = socketIO(server);
 
 io.on("connection", socket => {
   console.log("New client connected.");
-  io.emit("stateUpdate", engine.getBoardState());
+  socket.emit("boardUpdate", engine.getBoardState());
   socket.on("disconnect", () => {
     console.log("Client disconnected.");
   });

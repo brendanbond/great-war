@@ -1,0 +1,18 @@
+.App {
+  text-align: center;
+}
+
+.game-board {
+  display: block;
+  width: 450px;
+  height: 450px;
+  border: 4px solid black;
+}
+
+.game-board-square {
+  float: left;
+  text-align: center;
+  width: 48px;
+  height: 48px;
+  border: 1px black solid;
+}
