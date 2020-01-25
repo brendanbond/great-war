@@ -16,3 +16,7 @@
   height: 48px;
   border: 1px black solid;
 }
+
+.game-board-square:hover {
+  background-color: gray;
+}

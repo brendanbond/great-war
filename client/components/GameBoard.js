@@ -2,6 +2,8 @@ import React from "react";
 import GameSquare from "./GameSquare";
 
 function GameBoard(props) {
+  const handleClick = () => {};
+
   return (
     <div className="game-board">
       {props.board.map((row, index) => {
