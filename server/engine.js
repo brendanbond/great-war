@@ -37,31 +37,32 @@ module.exports = (function engine() {
     inCheck: false
   };
 
-  const Pawn = {
-    id: PAWN,
-    moves: [[0, 1]],
-    attacks: [
-      [1, 1],
-      [-1, 1]
-    ],
-    opens: [
-      [0, 1],
-      [0, 2]
-    ]
-  };
-
-  const King = {
-    id: KING,
-    moves: [
-      [0, 1],
-      [1, 0],
-      [1, 1],
-      [0, -1],
-      [-1, 0],
-      [-1, -1],
-      [1, -1],
-      [-1, 1]
-    ]
+  const Pieces = {
+    Pawn: {
+      id: PAWN,
+      moves: [[0, 1]],
+      attacks: [
+        [1, 1],
+        [-1, 1]
+      ],
+      opens: [
+        [0, 1],
+        [0, 2]
+      ]
+    },
+    King: {
+      id: KING,
+      moves: [
+        [0, 1],
+        [1, 0],
+        [1, 1],
+        [0, -1],
+        [-1, 0],
+        [-1, -1],
+        [1, -1],
+        [-1, 1]
+      ]
+    }
   };
 
   /* engine booleans and counters */
@@ -70,8 +71,15 @@ module.exports = (function engine() {
 
   /* engine functions */
 
+  /* get the board state */
+  const getBoardState = () => {
+    return board;
+  };
+
   /* calculate an array of possible moves */
   const possibleMoves = (piece, x, y) => {
+    /* TODO: link piece (which will be an ID) to the object it corresponds to */
+
     /* if the game is opening, add possible openings if applicable (i.e. pawns) */
     if (piece.opens && opening) {
       let opens = [];
@@ -174,11 +182,16 @@ module.exports = (function engine() {
       } else {
         turn = WHITE;
       }
+      moveNumber++;
     } else {
       /* TODO: I'm not really clear on error checking and how we should handle */
       throw new Error("Move not valid.");
     }
   };
 
-  return { BLACK };
+  return {
+    getBoardState,
+    possibleMoves,
+    move
+  };
 })();
