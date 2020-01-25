@@ -12,7 +12,7 @@ const port = process.env.PORT || 5000;
 const game = {};
 
 app.use(morgan("dev"));
-app.use(express.static("public"));
+app.use(express.static("dist"));
 
 app.get("/", (req, res) => {
   res.sendFile("index.html");

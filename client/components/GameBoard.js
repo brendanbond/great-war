@@ -1,16 +1,30 @@
-import React from "react";
+import React, { useState } from "react";
 import GameSquare from "./GameSquare";
 
 function GameBoard(props) {
-  const handleClick = () => {};
+  const [selectedSquare, setSelectedSquare] = useState(null);
+
+  const handleClick = (event, value, position) => {
+    props.getPossibleMoves(value, position);
+    /* TODO: use event.target to illuminate square */
+  };
 
   return (
-    <div className="game-board">
-      {props.board.map((row, index) => {
+    <div className="container game-board">
+      {props.board.map((row, rowIndex) => {
         return (
-          <div key={index} className="game-board-row">
-            {row.map((col, index) => {
-              return <GameSquare key={index} value={col} />;
+          <div key={rowIndex} className="row">
+            {row.map((col, colIndex) => {
+              return (
+                <GameSquare
+                  onClick={() => {
+                    handleClick(event, col, [rowIndex, colIndex]);
+                  }}
+                  key={colIndex}
+                  value={col}
+                  position={[rowIndex, colIndex]}
+                />
+              );
             })}
           </div>
         );

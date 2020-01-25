@@ -16,7 +16,7 @@ function App() {
 
   return (
     <div className="App">
-      <GameBoard board={board} />
+      <GameBoard getPossibleMoves={getPossibleMoves} board={board} />
     </div>
   );
 }

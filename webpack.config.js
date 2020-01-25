@@ -33,6 +33,7 @@ module.exports = {
     filename: "frontend.js"
   },
   devServer: {
-    contentBase: "./dist"
+    contentBase: "./dist",
+    proxy: { "/**": { target: "http://localhost:5000", secure: false } }
   }
 };
