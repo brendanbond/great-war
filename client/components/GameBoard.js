@@ -2,10 +2,8 @@ import React, { useState } from "react";
 import GameSquare from "./GameSquare";
 
 function GameBoard(props) {
-  const [selectedSquare, setSelectedSquare] = useState(null);
-
-  const handleClick = (event, value, position) => {
-    props.getPossibleMoves(value, position);
+  const handleClick = (event, position) => {
+    console.log(position);
     /* TODO: use event.target to illuminate square */
   };
 
@@ -18,7 +16,7 @@ function GameBoard(props) {
               return (
                 <GameSquare
                   onClick={() => {
-                    handleClick(event, col, [rowIndex, colIndex]);
+                    handleClick(event, [rowIndex, colIndex]);
                   }}
                   key={colIndex}
                   value={col}
