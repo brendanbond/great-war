@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SocketIOClient from "socket.io-client";
 import GameSquare from "./GameSquare";
 import { arraysAreEqual } from "../utils/utils";
@@ -17,13 +17,14 @@ function GameBoard(props) {
 
   io.on("possibleMoves", data => {
     setPossibleMoves(data);
-    console.log(data);
   });
 
   const handleClick = (event, position) => {
     setSelectedSquare(position);
     if (board[position[0]][position[1]] != -1) {
       io.emit("getPossibleMoves", position);
+    } else {
+      setPossibleMoves(null);
     }
   };
 
@@ -33,6 +34,16 @@ function GameBoard(props) {
         return (
           <div key={rowIndex} className="row">
             {row.map((col, colIndex) => {
+              let highlighted = false;
+              if (possibleMoves) {
+                for (let i = 0; i < possibleMoves.moves.length; i++) {
+                  highlighted = arraysAreEqual(
+                    [rowIndex, colIndex],
+                    possibleMoves.moves[i]
+                  );
+                  if (highlighted) break;
+                }
+              }
               return (
                 <GameSquare
                   onClick={() => {
@@ -47,6 +58,7 @@ function GameBoard(props) {
                       ? true
                       : false
                   }
+                  highlighted={highlighted}
                 />
               );
             })}

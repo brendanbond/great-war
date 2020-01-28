@@ -21,3 +21,7 @@
 .selected {
   background-color: gray;
 }
+
+.highlighted {
+  background-color: greenyellow;
+}

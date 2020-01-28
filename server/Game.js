@@ -108,15 +108,14 @@ Game.prototype.getPossibleMoves = function(piece, row, col) {
 
   /* add in possible moves */
   let moves = [];
-  console.log(piece);
-  console.log(piece.possibleMoves());
   for (move of piece.possibleMoves().moves) {
-    /* check that we're still on the board */
+    /* check that we're still on the board and that we're not running into occupied squares */
     if (
       row + move[0] >= 0 &&
       row + move[0] < this.board.length &&
       col + move[1] >= 0 &&
-      col + move[1] < this.board[row].length
+      col + move[1] < this.board[row].length &&
+      this.board[row + move[0]][col + move[1]] == -1
     ) {
       moves.push([row + move[0], col + move[1]]);
     }
