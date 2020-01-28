@@ -17,3 +17,7 @@
 .game-board-square:hover {
   background-color: gray;
 }
+
+.selected {
+  background-color: gray;
+}

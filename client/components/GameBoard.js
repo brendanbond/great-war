@@ -1,15 +1,35 @@
 import React, { useState } from "react";
+import SocketIOClient from "socket.io-client";
 import GameSquare from "./GameSquare";
+import { arraysAreEqual } from "../utils/utils";
+
+const endpoint = "http://localhost:5000";
+const io = SocketIOClient(endpoint);
 
 function GameBoard(props) {
+  const [board, setBoard] = useState([]);
+  const [selectedSquare, setSelectedSquare] = useState(null);
+  const [possibleMoves, setPossibleMoves] = useState(null);
+
+  io.on("boardUpdate", data => {
+    setBoard(data);
+  });
+
+  io.on("possibleMoves", data => {
+    setPossibleMoves(data);
+    console.log(data);
+  });
+
   const handleClick = (event, position) => {
-    console.log(position);
-    props.socket.emit("getPossibleMoves", position);
+    setSelectedSquare(position);
+    if (board[position[0]][position[1]] != -1) {
+      io.emit("getPossibleMoves", position);
+    }
   };
 
   return (
     <div className="container game-board">
-      {props.board.map((row, rowIndex) => {
+      {board.map((row, rowIndex) => {
         return (
           <div key={rowIndex} className="row">
             {row.map((col, colIndex) => {
@@ -21,6 +41,12 @@ function GameBoard(props) {
                   key={colIndex}
                   value={col.id}
                   position={[rowIndex, colIndex]}
+                  selected={
+                    selectedSquare &&
+                    arraysAreEqual([rowIndex, colIndex], selectedSquare)
+                      ? true
+                      : false
+                  }
                 />
               );
             })}
