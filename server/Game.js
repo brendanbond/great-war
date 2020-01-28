@@ -93,7 +93,7 @@ Game.prototype.getPossibleMoves = function(piece, row, col) {
   /* if the game is opening, add possible openings if applicable (i.e. pawns) */
   let opens = [];
   if (piece.possibleMoves().opens && this.opening) {
-    for (open of piece.opens) {
+    for (open of piece.possibleMoves().opens) {
       /* check that we're still on the board */
       if (
         row + open[0] >= 0 &&
