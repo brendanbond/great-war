@@ -91,15 +91,15 @@ function Game(board) {
 
 Game.prototype.getPossibleMoves = function(piece, row, col) {
   /* if the game is opening, add possible openings if applicable (i.e. pawns) */
-  if (piece.possibleMoves.opens && this.opening) {
-    let opens = [];
-    for (open of piece.opens) {
+  let opens = [];
+  if (piece.possibleMoves().opens && this.opening) {
+    for (open of piece.possibleMoves().opens) {
       /* check that we're still on the board */
       if (
         row + open[0] >= 0 &&
-        row + open[0] < board.length &&
+        row + open[0] < this.board.length &&
         col + open[1] >= 0 &&
-        col + open[1] < board[row].length
+        col + open[1] < this.board[row].length
       ) {
         opens.push([row + open[0], col + open[1]]);
       }
@@ -108,29 +108,30 @@ Game.prototype.getPossibleMoves = function(piece, row, col) {
 
   /* add in possible moves */
   let moves = [];
-  for (move of piece.possibleMoves.moves) {
-    /* check that we're still on the board */
+  for (move of piece.possibleMoves().moves) {
+    /* check that we're still on the board and that we're not running into occupied squares */
     if (
       row + move[0] >= 0 &&
-      row + move[0] < board.length &&
+      row + move[0] < this.board.length &&
       col + move[1] >= 0 &&
-      col + move[1] < board[row].length
+      col + move[1] < this.board[row].length &&
+      this.board[row + move[0]][col + move[1]] == -1
     ) {
       moves.push([row + move[0], col + move[1]]);
     }
   }
 
   /* add in possible attacks if applicable */
-  if (piece.possibleMoves.attacks) {
-    let attacks = [];
-    for (attack of piece.possibleMoves.attacks) {
+  let attacks = [];
+  if (piece.possibleMoves().attacks) {
+    for (attack of piece.possibleMoves().attacks) {
       /* check that we're still on the board and that we're only attacking occupied squares */
       if (
         row + attack[0] >= 0 &&
-        row + attack[0] < board.length &&
+        row + attack[0] < this.board.length &&
         col + attack[1] >= 0 &&
-        col + attack[1] < board[row].length &&
-        board[row + attack[0]][col + attack[1]] != -1
+        col + attack[1] < this.board[row].length &&
+        this.board[row + attack[0]][col + attack[1]] != -1
       ) {
         attacks.push([row + attack[0], col + attack[1]]);
       }
@@ -166,7 +167,7 @@ Game.prototype.validateMove = function(piece, row, col, destRow, destCol) {
     }
   }
 
-  if (possibleMoves.attacks && board[destRow][destCol] != -1) {
+  if (possibleMoves.attacks && this.board[destRow][destCol] != -1) {
     for (attack of possibleMoves.attacks) {
       if ([destRow, destCol] == attack) {
         validMove = true;
@@ -186,12 +187,12 @@ Game.prototype.executeMove = function(piece, row, col, destRow, destCol) {
     this.opening = false;
   }
   if (validateMove(piece, row, col, destRow, destCol)) {
-    board[row][col] = -1;
+    this.board[row][col] = -1;
     /* TODO: this is probably not the best way to handle attacks */
-    if (board[destRow][destCol] != -1) {
+    if (this.board[destRow][destCol] != -1) {
       player.captures.push(board[destRow][destCol]);
     }
-    board[destRow][destCol] = piece;
+    this.board[destRow][destCol] = piece;
     if (this.turn == "white") {
       this.turn = "black";
     } else {

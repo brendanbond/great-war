@@ -24,6 +24,19 @@ const io = socketIO(server);
 io.on("connection", socket => {
   console.log("New client connected.");
   socket.emit("boardUpdate", game.board);
+
+  socket.on("getPossibleMoves", position => {
+    console.log(position);
+    socket.emit(
+      "possibleMoves",
+      game.getPossibleMoves(
+        game.board[position[0]][position[1]],
+        position[0],
+        position[1]
+      )
+    );
+  });
+
   socket.on("disconnect", () => {
     console.log("Client disconnected.");
   });
