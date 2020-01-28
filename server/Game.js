@@ -55,6 +55,13 @@ King.prototype.possibleMoves = function() {
   };
 };
 
+function isOppositeColor(pieceA, pieceB) {
+  return (
+    (pieceA.color == "white" && pieceB.color == "black") ||
+    (pieceA.color == "black" && pieceB.color == "white")
+  );
+}
+
 //prettier-ignore
 const DEFAULT_BOARD_SETUP = [
   [-1, -1, -1, -1, new King("black"), -1, -1, -1, -1],
@@ -71,7 +78,6 @@ const DEFAULT_BOARD_SETUP = [
 function Game(board) {
   this.id = uuidv4();
   this.board = board || DEFAULT_BOARD_SETUP;
-  this.turn = "white";
 
   this.white = {
     cards: [],
@@ -87,6 +93,7 @@ function Game(board) {
 
   this.opening = true;
   this.moveNumber = 1;
+  this.currentPlayer = this.white;
 }
 
 Game.prototype.getPossibleMoves = function(piece, row, col) {
@@ -148,9 +155,9 @@ Game.prototype.getPossibleMoves = function(piece, row, col) {
 
 /* validate a potential move */
 Game.prototype.validateMove = function(piece, row, col, destRow, destCol) {
-  /* check that the move is valid */
   let validMove = false;
-  possibleMoves = this.possibleMoves(piece, row, col);
+  let possibleMoves = this.possibleMoves(piece, row, col);
+
   if (possibleMoves.opens && opening) {
     for (open of possibleMoves.opens) {
       if ([destRow, destCol] == open) {
@@ -181,23 +188,25 @@ Game.prototype.validateMove = function(piece, row, col, destRow, destCol) {
 
 /* execute a move */
 Game.prototype.executeMove = function(piece, row, col, destRow, destCol) {
-  if (this.moveNumber <= 2) {
-    this.opening = true;
-  } else {
-    this.opening = false;
-  }
+  this.opening = this.moveNumber <= 2;
+
   if (validateMove(piece, row, col, destRow, destCol)) {
-    this.board[row][col] = -1;
-    /* TODO: this is probably not the best way to handle attacks */
-    if (this.board[destRow][destCol] != -1) {
-      player.captures.push(board[destRow][destCol]);
+    let dest = board[destRow][destCol];
+
+    board[row][col] = -1;
+
+    /* If attacking, add it to current player's captures. */
+    if (dest != -1) {
+      let target = board[row][col];
+      if (isOppositeColor(piece, target)) {
+        this.currentPlayer.captures.push(board[destRow][destCol]);
+      }
     }
-    this.board[destRow][destCol] = piece;
-    if (this.turn == "white") {
-      this.turn = "black";
-    } else {
-      this.turn = "white";
-    }
+
+    board[destRow][destCol] = piece;
+
+    this.currentPlayer =
+      this.currentPlayer == this.white ? this.black : this.white;
     this.moveNumber++;
   } else {
     /* TODO: I'm not really clear on error checking and how we should handle */
