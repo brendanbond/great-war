@@ -3,13 +3,13 @@ const http = require("http");
 const morgan = require("morgan");
 const socketIO = require("socket.io");
 
-const engine = require("./engine");
+const Game = require("./Game");
 
 const app = express();
 const port = process.env.PORT || 5000;
 
-/* TODO: we will likely need a game object for connections to the server while a game is in progress */
-const game = {};
+/* TODO: we will likely need an array of game objects to support multiple concurrent games */
+const game = new Game();
 
 app.use(morgan("dev"));
 app.use(express.static("dist"));
@@ -23,7 +23,7 @@ const io = socketIO(server);
 
 io.on("connection", socket => {
   console.log("New client connected.");
-  socket.emit("boardUpdate", engine.getBoardState());
+  socket.emit("boardUpdate", game.board);
   socket.on("disconnect", () => {
     console.log("Client disconnected.");
   });

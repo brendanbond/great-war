@@ -19,7 +19,7 @@ function GameBoard(props) {
                     handleClick(event, [rowIndex, colIndex]);
                   }}
                   key={colIndex}
-                  value={col}
+                  value={col.id}
                   position={[rowIndex, colIndex]}
                 />
               );
