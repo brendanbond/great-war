@@ -4,7 +4,7 @@ import GameSquare from "./GameSquare";
 function GameBoard(props) {
   const handleClick = (event, position) => {
     console.log(position);
-    /* TODO: use event.target to illuminate square */
+    props.socket.emit("getPossibleMoves", position);
   };
 
   return (

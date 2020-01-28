@@ -9,14 +9,20 @@ const io = SocketIOClient(endpoint);
 function App() {
   console.log("App function call");
   const [board, setBoard] = useState([]);
+  const [possibleMoves, setPossibleMoves] = useState(null);
 
   io.on("boardUpdate", data => {
     setBoard(data);
   });
 
+  io.on("possibleMoves", data => {
+    setPossibleMoves(data);
+    console.log(data);
+  });
+
   return (
     <div className="App">
-      <GameBoard board={board} />
+      <GameBoard socket={io} board={board} />
     </div>
   );
 }
