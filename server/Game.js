@@ -122,9 +122,9 @@ Game.prototype.getActions = function(row, col) {
     });
   }
 
-  /* add in possible moves */
+  /* add in possible moves, including opens */
   if (piece.actions.moves) {
-    piece.actions.moves = piece.actions.moves.map(move => {
+    piece.actions.moves = piece.actions.moves.reduce((moves, move) => {
       /* check that we're still on the board and that we're not running into occupied squares */
       if (
         row + move[0] >= 0 &&
@@ -133,10 +133,11 @@ Game.prototype.getActions = function(row, col) {
         col + move[1] < this.board[row].length &&
         this.board[row + move[0]][col + move[1]] == -1
       ) {
-        return [row + move[0], col + move[1]];
+        // return [row + move[0], col + move[1]];
+        moves.push([row + move[0], col + move[1]]);
       }
-      return [-1, -1];
-    });
+      return moves;
+    }, []);
   }
 
   /* add in possible attacks if applicable */
