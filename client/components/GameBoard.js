@@ -9,22 +9,22 @@ const io = SocketIOClient(endpoint);
 function GameBoard(props) {
   const [board, setBoard] = useState([]);
   const [selectedSquare, setSelectedSquare] = useState(null);
-  const [possibleMoves, setPossibleMoves] = useState(null);
+  const [actions, setActions] = useState(null);
 
   io.on("boardUpdate", data => {
     setBoard(data);
   });
 
-  io.on("possibleMoves", data => {
-    setPossibleMoves(data);
+  io.on("actions", data => {
+    setActions(data);
   });
 
   const handleClick = (event, position) => {
     setSelectedSquare(position);
     if (board[position[0]][position[1]] != -1) {
-      io.emit("getPossibleMoves", position);
+      io.emit("getActions", position);
     } else {
-      setPossibleMoves(null);
+      setActions(null);
     }
   };
 
@@ -35,11 +35,11 @@ function GameBoard(props) {
           <div key={rowIndex} className="row">
             {row.map((col, colIndex) => {
               let highlighted = false;
-              if (possibleMoves) {
-                for (let i = 0; i < possibleMoves.moves.length; i++) {
+              if (actions) {
+                for (let i = 0; i < actions.moves.length; i++) {
                   highlighted = arraysAreEqual(
                     [rowIndex, colIndex],
-                    possibleMoves.moves[i]
+                    actions.moves[i]
                   );
                   if (highlighted) break;
                 }

@@ -25,11 +25,10 @@ io.on("connection", socket => {
   console.log("New client connected.");
   socket.emit("boardUpdate", game.board);
 
-  socket.on("getPossibleMoves", position => {
-    console.log(position);
+  socket.on("getActions", position => {
     socket.emit(
-      "possibleMoves",
-      game.getPossibleMoves(
+      "actions",
+      game.getActions(
         game.board[position[0]][position[1]],
         position[0],
         position[1]
