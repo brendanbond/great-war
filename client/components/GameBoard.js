@@ -16,8 +16,7 @@ function GameBoard(props) {
   });
 
   const handleClick = (event, position) => {
-    let piece = board[position[0]][position[1]];
-    setSelectedSquare(piece);
+    setSelectedSquare(position);
   };
 
   return (
@@ -27,16 +26,19 @@ function GameBoard(props) {
           <div key={rowIndex} className="row">
             {row.map((col, colIndex) => {
               let highlighted = false;
-              if (selectedSquare && selectedSquare.actions) {
-                for (let i = 0; i < selectedSquare.actions.moves.length; ++i) {
-                  if (
-                    arraysAreEqual(
-                      [rowIndex, colIndex],
-                      selectedSquare.actions.moves[i]
-                    )
-                  ) {
-                    highlighted = true;
-                    break;
+              if (selectedSquare) {
+                let piece = board[selectedSquare[0]][selectedSquare[1]];
+                if (piece.actions) {
+                  for (let i = 0; i < piece.actions.moves.length; ++i) {
+                    if (
+                      arraysAreEqual(
+                        [rowIndex, colIndex],
+                        piece.actions.moves[i]
+                      )
+                    ) {
+                      highlighted = true;
+                      break;
+                    }
                   }
                 }
               }

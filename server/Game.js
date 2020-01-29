@@ -72,7 +72,6 @@ const DEFAULT_BOARD_SETUP = [
 function Game(board) {
   this.id = uuidv4();
   this.board = board || DEFAULT_BOARD_SETUP;
-  this.updateBoard();
 
   this.white = {
     cards: [],
@@ -89,6 +88,8 @@ function Game(board) {
   this.opening = true;
   this.moveNumber = 1;
   this.currentPlayer = this.white;
+
+  this.updateBoard();
 }
 
 /* update the board with available moves */
@@ -107,21 +108,6 @@ Game.prototype.getActions = function(row, col) {
     return;
   }
 
-  /* if the game is opening, add possible openings if applicable (i.e. pawns) */
-  if (piece.actions.opens && this.opening) {
-    piece.actions.opens = piece.actions.opens.map(open => {
-      /* check that we're still on the board */
-      if (
-        row + open[0] >= 0 &&
-        row + open[0] < this.board.length &&
-        col + open[1] >= 0 &&
-        col + open[1] < this.board[row].length
-      ) {
-        return [row + open[0], col + open[1]];
-      }
-    });
-  }
-
   /* add in possible moves, including opens */
   if (piece.actions.moves) {
     piece.actions.moves = piece.actions.moves.reduce((moves, move) => {
@@ -138,6 +124,27 @@ Game.prototype.getActions = function(row, col) {
       }
       return moves;
     }, []);
+  }
+
+  /* if the game is opening, add possible openings if applicable (i.e. pawns) */
+  if (piece.actions.opens && this.opening) {
+    piece.actions.opens = piece.actions.opens.reduce((opens, open) => {
+      /* check that we're still on the board */
+      if (
+        row + open[0] >= 0 &&
+        row + open[0] < this.board.length &&
+        col + open[1] >= 0 &&
+        col + open[1] < this.board[row].length
+      ) {
+        opens.push([row + open[0], col + open[1]]);
+      }
+      return opens;
+    }, []);
+
+    /* add opens to moves */
+    for (open of piece.actions.opens) {
+      piece.actions.moves.push(open);
+    }
   }
 
   /* add in possible attacks if applicable */
