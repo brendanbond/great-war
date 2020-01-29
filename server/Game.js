@@ -3,11 +3,8 @@ const uuidv4 = require("uuid/v4");
 function Pawn(color) {
   this.id = "P";
   this.color = color;
-}
-
-Pawn.prototype.actions = function() {
   if (this.color == "white") {
-    return {
+    this.actions = {
       moves: [[-1, 0]],
       attacks: [
         [-1, 1],
@@ -19,7 +16,7 @@ Pawn.prototype.actions = function() {
       ]
     };
   } else {
-    return {
+    this.actions = {
       moves: [[1, 0]],
       attacks: [
         [1, 1],
@@ -31,15 +28,12 @@ Pawn.prototype.actions = function() {
       ]
     };
   }
-};
+}
 
 function King(color) {
   this.id = "K";
   this.color = color;
-}
-
-King.prototype.actions = function() {
-  return {
+  this.actions = {
     moves: [
       [0, 1],
       [1, 0],
@@ -53,7 +47,7 @@ King.prototype.actions = function() {
     attacks: null,
     opens: null
   };
-};
+}
 
 function isOppositeColor(pieceA, pieceB) {
   return (
@@ -78,6 +72,7 @@ const DEFAULT_BOARD_SETUP = [
 function Game(board) {
   this.id = uuidv4();
   this.board = board || DEFAULT_BOARD_SETUP;
+  this.updateBoard();
 
   this.white = {
     cards: [],
@@ -96,12 +91,25 @@ function Game(board) {
   this.currentPlayer = this.white;
 }
 
-Game.prototype.getActions = function(piece, row, col) {
-  let moves = [];
+/* update the board with available moves */
+Game.prototype.updateBoard = function() {
+  for (let row = 0; row < this.board.length; ++row) {
+    for (let col = 0; col < this.board[row].length; ++col) {
+      this.getActions(row, col);
+    }
+  }
+};
+
+/* get the available moves of a piece at row, col */
+Game.prototype.getActions = function(row, col) {
+  let piece = this.board[row][col];
+  if (piece == -1) {
+    return;
+  }
 
   /* if the game is opening, add possible openings if applicable (i.e. pawns) */
-  if (piece.actions().opens && this.opening) {
-    for (open of piece.actions().opens) {
+  if (piece.actions.opens && this.opening) {
+    piece.actions.opens = piece.actions.opens.map(open => {
       /* check that we're still on the board */
       if (
         row + open[0] >= 0 &&
@@ -109,29 +117,31 @@ Game.prototype.getActions = function(piece, row, col) {
         col + open[1] >= 0 &&
         col + open[1] < this.board[row].length
       ) {
-        moves.push([row + open[0], col + open[1]]);
+        return [row + open[0], col + open[1]];
       }
-    }
+    });
   }
 
   /* add in possible moves */
-  for (move of piece.actions().moves) {
-    /* check that we're still on the board and that we're not running into occupied squares */
-    if (
-      row + move[0] >= 0 &&
-      row + move[0] < this.board.length &&
-      col + move[1] >= 0 &&
-      col + move[1] < this.board[row].length &&
-      this.board[row + move[0]][col + move[1]] == -1
-    ) {
-      moves.push([row + move[0], col + move[1]]);
-    }
+  if (piece.actions.moves) {
+    piece.actions.moves = piece.actions.moves.map(move => {
+      /* check that we're still on the board and that we're not running into occupied squares */
+      if (
+        row + move[0] >= 0 &&
+        row + move[0] < this.board.length &&
+        col + move[1] >= 0 &&
+        col + move[1] < this.board[row].length &&
+        this.board[row + move[0]][col + move[1]] == -1
+      ) {
+        return [row + move[0], col + move[1]];
+      }
+      return [-1, -1];
+    });
   }
 
   /* add in possible attacks if applicable */
-  let attacks = [];
-  if (piece.actions().attacks) {
-    for (attack of piece.actions().attacks) {
+  if (piece.actions.attacks) {
+    piece.actions.attacks = piece.actions.attacks.map(attack => {
       /* check that we're still on the board and that we're only attacking occupied squares */
       if (
         row + attack[0] >= 0 &&
@@ -140,16 +150,10 @@ Game.prototype.getActions = function(piece, row, col) {
         col + attack[1] < this.board[row].length &&
         this.board[row + attack[0]][col + attack[1]] != -1
       ) {
-        attacks.push([row + attack[0], col + attack[1]]);
+        return [row + attack[0], col + attack[1]];
       }
-    }
+    });
   }
-
-  /* return actions object */
-  return {
-    moves: moves,
-    attacks: attacks
-  };
 };
 
 /* validate a potential move */
