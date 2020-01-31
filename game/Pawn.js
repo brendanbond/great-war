@@ -5,7 +5,6 @@ function Pawn(color) {
   const opening = true;
 
   const getActions = (board, row, col) => {
-    console.log(board);
     let actions = {
       moves: [],
       attacks: []
@@ -24,7 +23,6 @@ function Pawn(color) {
       }
       actions.attacks.push([row + 1, col + 1], [row + 1, col - 1]);
     }
-    console.log(actions.moves);
     actions.moves.filter(move => {
       if (
         board[row + move[0]][col + move[1]] === -1 && // the destination square is unoccupied

@@ -25,16 +25,16 @@ io.on("connection", socket => {
   console.log("New client connected.");
   socket.emit("boardUpdate", game.board);
 
-  // socket.on("getActions", position => {
-  //   socket.emit(
-  //     "actions",
-  //     game.getActions(
-  //       game.board[position[0]][position[1]],
-  //       position[0],
-  //       position[1]
-  //     )
-  //   );
-  // });
+  socket.on("executeMove", data => {
+    game.executeMove(
+      data.piece,
+      data.row,
+      data.col,
+      data.destRow,
+      data.destCol
+    );
+    socket.emit("boardUpdate", game.board);
+  });
 
   socket.on("disconnect", () => {
     console.log("Client disconnected.");

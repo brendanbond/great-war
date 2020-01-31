@@ -1,6 +1,6 @@
 const uuidv4 = require("uuid/v4");
 const Pawn = require("./Pawn");
-const arraysAreEqual = require("./utils");
+const utils = require("./utils");
 
 function King(color) {
   this.id = "K";
@@ -69,7 +69,7 @@ Game.prototype.updateBoard = function() {
   for (let row = 0; row < this.board.length; ++row) {
     for (let col = 0; col < this.board[row].length; ++col) {
       let square = this.board[row][col];
-      if (square !== -1) {
+      if (square.getActions) {
         square.actions = square.getActions(this.board, row, col);
       }
     }
@@ -77,12 +77,13 @@ Game.prototype.updateBoard = function() {
 };
 
 /* validate a potential move */
+/* TODO: do we need this? */
 Game.prototype.validateMove = function(row, col, destRow, destCol) {
   let validMove = false;
   let actions = this.board[row][col].actions;
 
   for (move of actions.moves) {
-    if (arraysAreEqual([destRow, destCol], move)) {
+    if (utils.arraysAreEqual([destRow, destCol], move)) {
       validMove = true;
       break;
     }
@@ -90,7 +91,7 @@ Game.prototype.validateMove = function(row, col, destRow, destCol) {
 
   if (actions.attacks && this.board[destRow][destCol] != -1) {
     for (attack of actions.attacks) {
-      if (arraysAreEqual([destRow, destCol], attack)) {
+      if (utils.arraysAreEqual([destRow, destCol], attack)) {
         validMove = true;
         break;
       }
@@ -122,6 +123,7 @@ Game.prototype.executeMove = function(piece, row, col, destRow, destCol) {
     this.currentPlayer =
       this.currentPlayer == this.white ? this.black : this.white;
     this.moveNumber++;
+    /* TODO: maybe we just need to update the piece that moved instead of the entire board */
     this.updateBoard();
   } else {
     /* TODO: I'm not really clear on error checking and how we should handle */
