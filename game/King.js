@@ -19,11 +19,8 @@ King.prototype.getActions = function(board, row, col) {
 
   actions.moves = actions.moves.filter(move => {
     return (
-      move[0] >= 0 && // row doesn't fall off the board top
-      move[0] < board.length && // row doesn't fall off of the board bottom
-      move[1] >= 0 && // col doesn't fall off of the board left
-      move[1] < board[row].length && // col doesn't fall off of the board right
-      board[move[0]][move[1]] === -1
+      board.isValidPosition(move[0], move[1]) &&
+      board.isEmptyPosition(move[0], move[1])
     );
   });
 

@@ -1,7 +1,8 @@
-const uuidv4 = require("uuid/v4");
-const Pawn = require("./Pawn");
+const Board = require("./Board");
 const King = require("./King");
+const Pawn = require("./Pawn");
 const utils = require("./utils");
+const uuidv4 = require("uuid/v4");
 
 function isOppositeColor(pieceA, pieceB) {
   return (
@@ -10,22 +11,9 @@ function isOppositeColor(pieceA, pieceB) {
   );
 }
 
-//prettier-ignore
-const DEFAULT_BOARD_SETUP = [
-  [-1, -1, -1, -1, new King("black"), -1, -1, -1, -1],
-  [new Pawn("black"), new Pawn("black"), new Pawn("black"), new Pawn("black"), new Pawn("black"), new Pawn("black"), new Pawn("black"), new Pawn("black"), new Pawn("black")],
-  [-1, -1, -1, -1, -1, -1, -1, -1, -1],
-  [-1, -1, -1, -1, -1, -1, -1, -1, -1],
-  [-1, -1, -1, -1, -1, -1, -1, -1, -1],
-  [-1, -1, -1, -1, -1, -1, -1, -1, -1],
-  [-1, -1, -1, -1, -1, -1, -1, -1, -1],
-  [new Pawn("white"), new Pawn("white"), new Pawn("white"), new Pawn("white"), new Pawn("white"), new Pawn("white"), new Pawn("white"), new Pawn("white"), new Pawn("white")],
-  [-1, -1, -1, -1, new King("white"), -1, -1, -1, -1]
-];
-
-function Game(board) {
+function Game(grid) {
   this.id = uuidv4();
-  this.board = board || DEFAULT_BOARD_SETUP;
+  this.board = new Board(grid);
 
   this.white = {
     cards: [],
@@ -48,10 +36,10 @@ function Game(board) {
 
 /* update the board with available moves */
 Game.prototype.updateBoard = function() {
-  for (let row = 0; row < this.board.length; ++row) {
-    for (let col = 0; col < this.board[row].length; ++col) {
-      let square = this.board[row][col];
-      if (square !== -1) {
+  for (let row = 0; row < this.board.nRows(); ++row) {
+    for (let col = 0; col < this.board.nCols(row); ++col) {
+      if (this.board.isOccupiedPosition(row, col)) {
+        let square = this.board.positionAt(row, col);
         square.getActions(this.board, row, col);
       }
     }
@@ -62,7 +50,7 @@ Game.prototype.updateBoard = function() {
 /* TODO: do we need this? */
 Game.prototype.validateMove = function(row, col, destRow, destCol) {
   let validMove = false;
-  let actions = this.board[row][col].actions;
+  let actions = this.board.positionAt(row, col).actions;
 
   for (move of actions.moves) {
     if (utils.arraysAreEqual([destRow, destCol], move)) {
@@ -71,7 +59,7 @@ Game.prototype.validateMove = function(row, col, destRow, destCol) {
     }
   }
 
-  if (actions.attacks && this.board[destRow][destCol] != -1) {
+  if (actions.attacks && this.board.positionIsOccupied) {
     for (attack of actions.attacks) {
       if (utils.arraysAreEqual([destRow, destCol], attack)) {
         validMove = true;
@@ -86,32 +74,40 @@ Game.prototype.validateMove = function(row, col, destRow, destCol) {
 /* execute a move */
 Game.prototype.executeMove = function(row, col, destRow, destCol) {
   if (this.validateMove(row, col, destRow, destCol)) {
-    let dest = this.board[destRow][destCol];
-    let piece = this.board[row][col];
-    this.board[row][col] = -1;
+    let piece = this.board.positionAt(row, col);
+
+    this.board.clearPosition(row, col);
 
     /* If attacking, add it to current player's captures. */
-    if (dest !== -1) {
-      let target = this.board[row][col];
+    if (this.board.isOccupiedPosition(row, col)) {
+      let target = this.board.positionAt(row, col);
       if (isOppositeColor(piece, target)) {
-        this.currentPlayer.captures.push(board[destRow][destCol]);
+        this.currentPlayer.captures.push(board.positionAt(destRow, destCol));
       }
     }
 
-    this.board[destRow][destCol] = piece;
+    this.board.setPosition(destRow, destCol, piece);
+
     if (piece.move) {
       piece.move();
     }
 
+    /* update current player */
     this.currentPlayer =
       this.currentPlayer == this.white ? this.black : this.white;
+
     this.moveNumber++;
+
     /* TODO: maybe we just need to update the piece that moved instead of the entire board */
     this.updateBoard();
   } else {
     /* TODO: I'm not really clear on error checking and how we should handle */
     throw new Error("Move not valid.");
   }
+};
+
+Game.prototype.getBoardState = function() {
+  return this.board.grid;
 };
 
 module.exports = Game;

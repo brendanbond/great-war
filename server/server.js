@@ -23,11 +23,11 @@ const io = socketIO(server);
 
 io.on("connection", socket => {
   console.log("New client connected.");
-  socket.emit("boardUpdate", game.board);
+  socket.emit("boardUpdate", game.getBoardState());
 
   socket.on("executeMove", data => {
     game.executeMove(data.row, data.col, data.destRow, data.destCol);
-    socket.emit("boardUpdate", game.board);
+    socket.emit("boardUpdate", game.getBoardState());
   });
 
   socket.on("disconnect", () => {

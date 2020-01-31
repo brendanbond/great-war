@@ -28,21 +28,15 @@ Pawn.prototype.getActions = function(board, row, col) {
 
   actions.moves = actions.moves.filter(move => {
     return (
-      board[move[0]][move[1]] === -1 && // the destination square is unoccupied
-      move[0] >= 0 && // row doesn't fall off the board top
-      move[0] < board.length && // row doesn't fall off of the board bottom
-      move[1] >= 0 && // col doesn't fall off of the board left
-      move[1] < board[row].length // col doesn't fall off of the board right
+      board.isValidPosition(move[0], move[1]) &&
+      board.isEmptyPosition(move[0], move[1])
     );
   });
 
   actions.attacks = actions.attacks.filter(attack => {
     return (
-      board[attack[0]][attack[1]] !== -1 && // the destination square is occupied
-      attack[0] >= 0 && // row doesn't fall off the board top
-      attack[0] < board.length && // row doesn't fall off of the board bottom
-      attack[1] >= 0 && // col doesn't fall off of the board left
-      attack[1] < board[row].length // col doesn't fall off of the board right
+      board.isValidPosition(attack[0], attack[1]) &&
+      board.isOccupiedPosition(attack[0], attack[1])
     );
   });
 
