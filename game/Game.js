@@ -1,25 +1,7 @@
 const uuidv4 = require("uuid/v4");
 const Pawn = require("./Pawn");
+const King = require("./King");
 const utils = require("./utils");
-
-function King(color) {
-  this.id = "K";
-  this.color = color;
-  this.actions = {
-    moves: [
-      [0, 1],
-      [1, 0],
-      [1, 1],
-      [0, -1],
-      [-1, 0],
-      [-1, -1],
-      [1, -1],
-      [-1, 1]
-    ],
-    attacks: null,
-    opens: null
-  };
-}
 
 function isOppositeColor(pieceA, pieceB) {
   return (
@@ -30,15 +12,15 @@ function isOppositeColor(pieceA, pieceB) {
 
 //prettier-ignore
 const DEFAULT_BOARD_SETUP = [
-  [-1, -1, -1, -1, -1, -1, -1, -1, -1],
+  [-1, -1, -1, -1, new King("black"), -1, -1, -1, -1],
   [new Pawn("black"), new Pawn("black"), new Pawn("black"), new Pawn("black"), new Pawn("black"), new Pawn("black"), new Pawn("black"), new Pawn("black"), new Pawn("black")],
   [-1, -1, -1, -1, -1, -1, -1, -1, -1],
   [-1, -1, -1, -1, -1, -1, -1, -1, -1],
   [-1, -1, -1, -1, -1, -1, -1, -1, -1],
   [-1, -1, -1, -1, -1, -1, -1, -1, -1],
   [-1, -1, -1, -1, -1, -1, -1, -1, -1],
-  [-1, -1, -1, -1, -1, -1, -1, -1, -1],
-  [-1, -1, -1, -1, -1, -1, -1, -1, -1]
+  [new Pawn("white"), new Pawn("white"), new Pawn("white"), new Pawn("white"), new Pawn("white"), new Pawn("white"), new Pawn("white"), new Pawn("white"), new Pawn("white")],
+  [-1, -1, -1, -1, new King("white"), -1, -1, -1, -1]
 ];
 
 function Game(board) {
@@ -69,7 +51,6 @@ Game.prototype.updateBoard = function() {
   for (let row = 0; row < this.board.length; ++row) {
     for (let col = 0; col < this.board[row].length; ++col) {
       let square = this.board[row][col];
-      console.log(square);
       if (square !== -1) {
         square.getActions(this.board, row, col);
       }

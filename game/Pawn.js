@@ -2,6 +2,7 @@ const arraysAreEqual = require("./utils");
 
 function Pawn(color) {
   this.id = "P";
+  this.color = color;
   this.opening = true;
 }
 
@@ -24,6 +25,7 @@ Pawn.prototype.getActions = function(board, row, col) {
     }
     actions.attacks.push([row + 1, col + 1], [row + 1, col - 1]);
   }
+
   actions.moves = actions.moves.filter(move => {
     return (
       board[move[0]][move[1]] === -1 && // the destination square is unoccupied
