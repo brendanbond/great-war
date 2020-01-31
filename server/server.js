@@ -3,7 +3,7 @@ const http = require("http");
 const morgan = require("morgan");
 const socketIO = require("socket.io");
 
-const Game = require("./Game");
+const Game = require("../game/Game");
 
 const app = express();
 const port = process.env.PORT || 5000;

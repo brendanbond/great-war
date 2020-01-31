@@ -9,7 +9,6 @@ const io = SocketIOClient(endpoint);
 function GameBoard(props) {
   const [board, setBoard] = useState([]);
   const [selectedSquare, setSelectedSquare] = useState(null);
-  // const [actions, setActions] = useState(null);
 
   io.on("boardUpdate", data => {
     setBoard(data);
