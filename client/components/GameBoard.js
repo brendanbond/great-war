@@ -22,23 +22,18 @@ function GameBoard(props) {
       /* if selected square has a piece that matches the turn, enter move state */
       /* TODO: check whose turn it is */
       if (board[position[0]][position[1]] != -1) {
-        console.log("Square is occupied, so we'll set moveState to true.");
         setMoveState(true);
       }
       /* if we're already in move state, click should begin to execute a move */
     } else {
-      console.log("moveState is true, so we'll try to attempt a move.");
       let piece = board[selectedSquare[0]][selectedSquare[1]];
-      console.log("Possible actions are:");
-      console.log(piece.actions);
+
       for (let i = 0; i < piece.actions.moves.length; i++) {
         /* if destination is one of possible actions, execute a move */
-        console.log("We're in the for loop now.");
+
         let move = piece.actions.moves[i];
         if (arraysAreEqual(move, position)) {
-          console.log("Found a move!");
           let data = {
-            piece: piece,
             row: selectedSquare[0],
             col: selectedSquare[1],
             destRow: move[0],
@@ -50,9 +45,7 @@ function GameBoard(props) {
           return;
         }
       }
-      console.log(
-        "We didn't find an acceptable move, so we'll set moveState to false"
-      );
+
       setMoveState(false);
       setSelectedSquare(position);
     }

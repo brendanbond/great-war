@@ -26,13 +26,7 @@ io.on("connection", socket => {
   socket.emit("boardUpdate", game.board);
 
   socket.on("executeMove", data => {
-    game.executeMove(
-      data.piece,
-      data.row,
-      data.col,
-      data.destRow,
-      data.destCol
-    );
+    game.executeMove(data.row, data.col, data.destRow, data.destCol);
     socket.emit("boardUpdate", game.board);
   });
 

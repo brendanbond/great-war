@@ -31,7 +31,7 @@ function isOppositeColor(pieceA, pieceB) {
 //prettier-ignore
 const DEFAULT_BOARD_SETUP = [
   [-1, -1, -1, -1, -1, -1, -1, -1, -1],
-  [Pawn("black"), Pawn("black"), Pawn("black"), Pawn("black"), Pawn("black"), Pawn("black"), Pawn("black"), Pawn("black"), Pawn("black")],
+  [new Pawn("black"), new Pawn("black"), new Pawn("black"), new Pawn("black"), new Pawn("black"), new Pawn("black"), new Pawn("black"), new Pawn("black"), new Pawn("black")],
   [-1, -1, -1, -1, -1, -1, -1, -1, -1],
   [-1, -1, -1, -1, -1, -1, -1, -1, -1],
   [-1, -1, -1, -1, -1, -1, -1, -1, -1],
@@ -69,8 +69,9 @@ Game.prototype.updateBoard = function() {
   for (let row = 0; row < this.board.length; ++row) {
     for (let col = 0; col < this.board[row].length; ++col) {
       let square = this.board[row][col];
-      if (square.getActions) {
-        square.actions = square.getActions(this.board, row, col);
+      console.log(square);
+      if (square !== -1) {
+        square.getActions(this.board, row, col);
       }
     }
   }
@@ -102,12 +103,10 @@ Game.prototype.validateMove = function(row, col, destRow, destCol) {
 };
 
 /* execute a move */
-Game.prototype.executeMove = function(piece, row, col, destRow, destCol) {
-  this.opening = this.moveNumber <= 2;
-
+Game.prototype.executeMove = function(row, col, destRow, destCol) {
   if (this.validateMove(row, col, destRow, destCol)) {
     let dest = this.board[destRow][destCol];
-
+    let piece = this.board[row][col];
     this.board[row][col] = -1;
 
     /* If attacking, add it to current player's captures. */
@@ -119,7 +118,6 @@ Game.prototype.executeMove = function(piece, row, col, destRow, destCol) {
     }
 
     this.board[destRow][destCol] = piece;
-    console.log(`Moved ${piece} from ${row}, ${col} to ${destRow}, ${destCol}`);
     if (piece.move) {
       piece.move();
     }
