@@ -119,6 +119,10 @@ Game.prototype.executeMove = function(piece, row, col, destRow, destCol) {
     }
 
     this.board[destRow][destCol] = piece;
+    console.log(`Moved ${piece} from ${row}, ${col} to ${destRow}, ${destCol}`);
+    if (piece.move) {
+      piece.move();
+    }
 
     this.currentPlayer =
       this.currentPlayer == this.white ? this.black : this.white;
