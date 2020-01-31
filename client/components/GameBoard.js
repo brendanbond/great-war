@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import SocketIOClient from "socket.io-client";
 import GameSquare from "./GameSquare";
-import { arraysAreEqual } from "../utils/utils";
+import { arraysAreEqual } from "../utils";
 
 const endpoint = "http://localhost:5000";
 const io = SocketIOClient(endpoint);
