@@ -2,6 +2,7 @@ const Bishop = require("./Bishop");
 const King = require("./King");
 const Knight = require("./Knight");
 const Pawn = require("./Pawn");
+const Queen = require("./Queen");
 const Rook = require("./Rook");
 
 const EMPTY = -1;
@@ -10,10 +11,10 @@ const EMPTY = -1;
 const DEFAULT_SETUP = [
   [EMPTY, EMPTY, EMPTY, EMPTY, new King("black"), EMPTY, EMPTY, EMPTY, EMPTY],
   [new Pawn("black"), new Pawn("black"), new Pawn("black"), new Pawn("black"), new Pawn("black"), new Pawn("black"), new Pawn("black"), new Pawn("black"), new Pawn("black")],
-  [new Rook("black"), EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
-  [EMPTY, EMPTY, EMPTY, EMPTY, new Bishop("white"), EMPTY, EMPTY, EMPTY, EMPTY],
-  [EMPTY, EMPTY, EMPTY, EMPTY, new Knight("black"), EMPTY, EMPTY, EMPTY, EMPTY],
-  [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
+  [EMPTY, EMPTY, EMPTY, EMPTY, new Rook("black"), EMPTY, EMPTY, EMPTY, EMPTY],
+  [EMPTY, EMPTY, EMPTY, EMPTY, new Bishop("black"), EMPTY, EMPTY, EMPTY, EMPTY],
+  [EMPTY, EMPTY, EMPTY, EMPTY, new Knight("white"), EMPTY, EMPTY, EMPTY, EMPTY],
+  [EMPTY, EMPTY, EMPTY, EMPTY, new Queen("white"), EMPTY, EMPTY, EMPTY, EMPTY],
   [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
   [new Pawn("white"), new Pawn("white"), new Pawn("white"), new Pawn("white"), new Pawn("white"), new Pawn("white"), new Pawn("white"), new Pawn("white"), new Pawn("white")],
   [EMPTY, EMPTY, EMPTY, EMPTY, new King("white"), EMPTY, EMPTY, EMPTY, EMPTY]

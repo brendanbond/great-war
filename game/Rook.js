@@ -8,6 +8,7 @@ function Rook(color) {
 Rook.prototype.getActions = function(board, row, col) {
   let moves = [];
 
+  /* down */
   for (let i = 1; i < board.nRows(); ++i) {
     if (board.isValidPosition(row + i, col)) {
       if (board.isOccupiedPosition(row + i, col)) {
@@ -21,6 +22,7 @@ Rook.prototype.getActions = function(board, row, col) {
     }
   }
 
+  /* up */
   for (let i = 1; i < board.nRows(); ++i) {
     if (board.isValidPosition(row - i, col)) {
       if (board.isOccupiedPosition(row - i, col)) {
@@ -34,6 +36,7 @@ Rook.prototype.getActions = function(board, row, col) {
     }
   }
 
+  /* right */
   for (let i = 1; i < board.nCols(); ++i) {
     if (board.isValidPosition(row, col + i)) {
       if (board.isOccupiedPosition(row, col + i)) {
@@ -47,6 +50,7 @@ Rook.prototype.getActions = function(board, row, col) {
     }
   }
 
+  /* left */
   for (let i = 1; i < board.nCols(); ++i) {
     if (board.isValidPosition(row, col - i)) {
       if (board.isOccupiedPosition(row, col - i)) {
