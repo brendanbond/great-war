@@ -8,9 +8,11 @@
 }
 
 .game-board-square {
+  font-size: 48px;
   text-align: center;
   width: 12vw;
   min-height: 12vw;
+  line-height: 12vw;
   border: 1px black solid;
 }
 

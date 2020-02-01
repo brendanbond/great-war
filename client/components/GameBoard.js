@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import SocketIOClient from "socket.io-client";
 import GameSquare from "./GameSquare";
-import { arraysAreEqual } from "../utils/utils";
+import { arraysAreEqual } from "../utils";
 
 const endpoint = "http://localhost:5000";
 const io = SocketIOClient(endpoint);
@@ -9,14 +9,46 @@ const io = SocketIOClient(endpoint);
 function GameBoard(props) {
   const [board, setBoard] = useState([]);
   const [selectedSquare, setSelectedSquare] = useState(null);
-  // const [actions, setActions] = useState(null);
+  const [moveState, setMoveState] = useState(false);
 
   io.on("boardUpdate", data => {
     setBoard(data);
   });
 
   const handleClick = (event, position) => {
-    setSelectedSquare(position);
+    /* if we're not already in move state and a piece occupies the clicked square, move us into move state */
+    if (moveState === false) {
+      setSelectedSquare(position);
+      /* if selected square has a piece that matches the turn, enter move state */
+      /* TODO: check whose turn it is */
+      if (board[position[0]][position[1]] != -1) {
+        setMoveState(true);
+      }
+      /* if we're already in move state, click should begin to execute a move */
+    } else {
+      let piece = board[selectedSquare[0]][selectedSquare[1]];
+
+      for (let i = 0; i < piece.actions.moves.length; i++) {
+        /* if destination is one of possible actions, execute a move */
+
+        let move = piece.actions.moves[i];
+        if (arraysAreEqual(move, position)) {
+          let data = {
+            row: selectedSquare[0],
+            col: selectedSquare[1],
+            destRow: move[0],
+            destCol: move[1]
+          };
+          io.emit("executeMove", data);
+          setMoveState(false);
+          setSelectedSquare(null);
+          return;
+        }
+      }
+
+      setMoveState(false);
+      setSelectedSquare(position);
+    }
   };
 
   return (
