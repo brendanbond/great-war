@@ -1,5 +1,3 @@
-const arraysAreEqual = require("./utils");
-
 function Pawn(color) {
   this.id = "P";
   this.color = color;

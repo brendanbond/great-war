@@ -1,3 +1,4 @@
+const Bishop = require("./Bishop");
 const King = require("./King");
 const Pawn = require("./Pawn");
 
@@ -7,7 +8,7 @@ const EMPTY = -1;
 const DEFAULT_SETUP = [
   [EMPTY, EMPTY, EMPTY, EMPTY, new King("black"), EMPTY, EMPTY, EMPTY, EMPTY],
   [new Pawn("black"), new Pawn("black"), new Pawn("black"), new Pawn("black"), new Pawn("black"), new Pawn("black"), new Pawn("black"), new Pawn("black"), new Pawn("black")],
-  [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
+  [new Bishop("black"), EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
   [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
   [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
   [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],

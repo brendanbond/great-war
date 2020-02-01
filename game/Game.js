@@ -4,13 +4,6 @@ const Pawn = require("./Pawn");
 const utils = require("./utils");
 const uuidv4 = require("uuid/v4");
 
-function isOppositeColor(pieceA, pieceB) {
-  return (
-    (pieceA.color === "white" && pieceB.color === "black") ||
-    (pieceA.color === "black" && pieceB.color === "white")
-  );
-}
-
 function Game(grid) {
   this.id = uuidv4();
   this.board = new Board(grid);
@@ -79,10 +72,12 @@ Game.prototype.executeMove = function(row, col, destRow, destCol) {
     this.board.clearPosition(row, col);
 
     /* If attacking, add it to current player's captures. */
-    if (this.board.isOccupiedPosition(row, col)) {
-      let target = this.board.positionAt(row, col);
-      if (isOppositeColor(piece, target)) {
-        this.currentPlayer.captures.push(board.positionAt(destRow, destCol));
+    if (this.board.isOccupiedPosition(destRow, destCol)) {
+      let target = this.board.positionAt(destRow, destCol);
+      if (utils.areOppositeColors(piece, target)) {
+        this.currentPlayer.captures.push(
+          this.board.positionAt(destRow, destCol)
+        );
       }
     }
 
