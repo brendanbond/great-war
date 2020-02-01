@@ -30,7 +30,7 @@ function Game(grid) {
 /* update the board with available moves */
 Game.prototype.updateBoard = function() {
   for (let row = 0; row < this.board.nRows(); ++row) {
-    for (let col = 0; col < this.board.nCols(row); ++col) {
+    for (let col = 0; col < this.board.nCols(); ++col) {
       if (this.board.isOccupiedPosition(row, col)) {
         let square = this.board.positionAt(row, col);
         square.getActions(this.board, row, col);

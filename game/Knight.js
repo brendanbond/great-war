@@ -6,8 +6,7 @@ function Knight(color) {
 }
 
 Knight.prototype.getActions = function(board, row, col) {
-  let moves = [],
-    move;
+  let moves = [];
 
   /* down and right */
   if (board.isValidPosition(row + 2, col + 1)) {

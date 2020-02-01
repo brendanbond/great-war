@@ -2,6 +2,7 @@ const Bishop = require("./Bishop");
 const King = require("./King");
 const Knight = require("./Knight");
 const Pawn = require("./Pawn");
+const Rook = require("./Rook");
 
 const EMPTY = -1;
 
@@ -9,7 +10,7 @@ const EMPTY = -1;
 const DEFAULT_SETUP = [
   [EMPTY, EMPTY, EMPTY, EMPTY, new King("black"), EMPTY, EMPTY, EMPTY, EMPTY],
   [new Pawn("black"), new Pawn("black"), new Pawn("black"), new Pawn("black"), new Pawn("black"), new Pawn("black"), new Pawn("black"), new Pawn("black"), new Pawn("black")],
-  [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
+  [new Rook("black"), EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
   [EMPTY, EMPTY, EMPTY, EMPTY, new Bishop("white"), EMPTY, EMPTY, EMPTY, EMPTY],
   [EMPTY, EMPTY, EMPTY, EMPTY, new Knight("black"), EMPTY, EMPTY, EMPTY, EMPTY],
   [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
@@ -48,11 +49,8 @@ Board.prototype.nRows = function() {
   return this.grid.length;
 };
 
-Board.prototype.nCols = function(row) {
-  if (row < 0 || row >= this.nRows()) {
-    throw "Invalid row " + row + " passed to Board#nCols()";
-  }
-  return this.grid[row].length;
+Board.prototype.nCols = function() {
+  return this.grid[0].length;
 };
 
 Board.prototype.positionAt = function(row, col) {
