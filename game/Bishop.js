@@ -54,9 +54,9 @@ Bishop.prototype.getActions = function(board, row, col) {
 
   /* up and right diagonal */
   for (let i = 1; i < board.nRows(); ++i) {
-    if (board.isValidPosition(row - i, col + 1)) {
-      if (board.isOccupiedPosition(row - i, col + 1)) {
-        let target = board.positionAt(row - i, col + 1);
+    if (board.isValidPosition(row - i, col + i)) {
+      if (board.isOccupiedPosition(row - i, col + i)) {
+        let target = board.positionAt(row - i, col + i);
         if (utils.areOppositeColors(this, target)) {
           actions.moves.push([row - i, col + i]);
         }
