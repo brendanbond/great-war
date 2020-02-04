@@ -25,6 +25,28 @@ function Game(grid) {
   this.updateBoard();
 }
 
+Game.prototype.reset = function(grid) {
+  this.board = new Board(grid);
+
+  this.white = {
+    cards: [],
+    captures: [],
+    inCheck: false
+  };
+
+  this.black = {
+    cards: [],
+    captures: [],
+    inCheck: false
+  };
+
+  this.opening = true;
+  this.moveNumber = 1;
+  this.currentPlayer = this.white;
+
+  this.updateBoard();
+};
+
 /* update the board with available moves */
 Game.prototype.updateBoard = function() {
   for (let row = 0; row < this.board.nRows(); ++row) {
