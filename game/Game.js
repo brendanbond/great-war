@@ -1,6 +1,4 @@
 const Board = require("./Board");
-const King = require("./King");
-const Pawn = require("./Pawn");
 const utils = require("./utils");
 const uuidv4 = require("uuid/v4");
 
