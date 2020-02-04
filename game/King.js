@@ -1,6 +1,7 @@
 function King(color) {
   this.id = "K";
   this.color = color;
+  this.symbol = this.color == "white" ? "\u2654" : "\u265a";
 }
 
 King.prototype.getActions = function(board, row, col) {

@@ -80,7 +80,7 @@ function GameBoard(props) {
                     handleClick(event, [rowIndex, colIndex]);
                   }}
                   key={colIndex}
-                  value={col.id}
+                  value={col.symbol}
                   position={[rowIndex, colIndex]}
                   selected={
                     selectedSquare &&
@@ -89,6 +89,7 @@ function GameBoard(props) {
                       : false
                   }
                   highlighted={highlighted}
+                  colored={(rowIndex + colIndex) % 2}
                 />
               );
             })}

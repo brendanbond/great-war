@@ -6,7 +6,8 @@ function GameSquare(props) {
       className={
         "col game-board-square " +
         (props.selected ? "selected " : "") +
-        (props.highlighted ? "highlighted " : "")
+        (props.highlighted ? "highlighted " : "") +
+        (props.colored ? "colored " : "")
       }
       onClick={props.onClick}
     >

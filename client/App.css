@@ -20,10 +20,14 @@
   background-color: gray;
 }
 
-.selected {
-  background-color: gray;
+.colored {
+  background-color: brown;
 }
 
 .highlighted {
   background-color: greenyellow;
+}
+
+.selected {
+  background-color: gray;
 }
