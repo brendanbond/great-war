@@ -40,13 +40,13 @@ ox.prototype.getActions = function (board, row, col) {
       }//end valid space on board check
     }//end column manipulation loop
   }//end row manipulation loop
-  
+
   //check left and right spaces
   for(let c = col - 1; c < col + 1; c += 2) {
     if(board.isValidPosition(row, c)) {
       if(board.isOccupiedPosition(row, c)) {
         let target = board.positionAt(row, c);
-        
+
         if (utils.areOppositeColors(this, target)) {
           actions.moves.push([row, c]);
         }
