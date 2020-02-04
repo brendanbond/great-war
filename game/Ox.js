@@ -19,7 +19,7 @@ function Ox(color) {
   this.color = color;
 }
 
-ox.prototype.getActions = function (board, row, col) {
+Ox.prototype.getActions = function (board, row, col) {
   let actions = {
     moves: []
   };
