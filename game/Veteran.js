@@ -5,7 +5,7 @@
 * 
 * This piece will potentially be a fairly powerful piece. It has the same move/capture set
 * as the knight and king combined. Due to it's veteran status, it knows how to maneuver on
-* the battle field and is not stopped by any piece (when moving in 2/1 fashion)
+* the battle field and is not stopped by any piece (when making knight-like moves)
 * 
 * Movement and Capturing for this piece is:
 *       Exactly two/1 (2/1) in any direction (like a Knight)
