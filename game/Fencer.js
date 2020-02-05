@@ -6,6 +6,9 @@
 * This piece will mainly be an offensive that will mostly charge into enemy territory,
 * however, it can slightly retreat when needed but can't go far 
 * 
+* TODO: Due to it's prowess with the sword, this piece can pierce through any enemy to
+*  proceed to its maximum spaces if desired
+* 
 * Movement and Capturing for this piece is:
 *       Up tp three (3) spaces forward
 *       Exactly one (1) space backward
