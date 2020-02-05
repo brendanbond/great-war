@@ -88,3 +88,5 @@ Zealot.prototype.getActions = function (board, row, col) {
     }
   }//end side and front corners
 };
+
+module.exports = Zealot;
