@@ -20,20 +20,54 @@ const EMPTY = -1;
 //   [EMPTY, EMPTY, EMPTY, EMPTY, new King("white"), EMPTY, EMPTY, EMPTY, EMPTY]
 // ];
 
-const DEFAULT_SETUP = [
-  [new Rook("black"), new Knight("black"), new Bishop("black"), new Queen("black"), new King("black"), new Bishop("black"), new Knight("black"), new Rook("black")],
-  [new Pawn("black"), new Pawn("black"), new Pawn("black"), new Pawn("black"), new Pawn("black"), new Pawn("black"), new Pawn("black"), new Pawn("black")],
-  [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
-  [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
-  [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
-  [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
-  [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
-  [new Pawn("white"), new Pawn("white"), new Pawn("white"), new Pawn("white"), new Pawn("white"), new Pawn("white"), new Pawn("white"), new Pawn("white")],
-  [new Rook("white"), new Knight("white"), new Bishop("white"), new Queen("white"), new King("white"), new Bishop("white"), new Knight("white"), new Rook("white")],
-];
-
 function Board(grid) {
-  this.grid = grid || DEFAULT_SETUP;
+  this.grid = grid || [
+    [
+      new Rook("black"),
+      new Knight("black"),
+      new Bishop("black"),
+      new Queen("black"),
+      new King("black"),
+      new Bishop("black"),
+      new Knight("black"),
+      new Rook("black")
+    ],
+    [
+      new Pawn("black"),
+      new Pawn("black"),
+      new Pawn("black"),
+      new Pawn("black"),
+      new Pawn("black"),
+      new Pawn("black"),
+      new Pawn("black"),
+      new Pawn("black")
+    ],
+    [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
+    [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
+    [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
+    [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
+    [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
+    [
+      new Pawn("white"),
+      new Pawn("white"),
+      new Pawn("white"),
+      new Pawn("white"),
+      new Pawn("white"),
+      new Pawn("white"),
+      new Pawn("white"),
+      new Pawn("white")
+    ],
+    [
+      new Rook("white"),
+      new Knight("white"),
+      new Bishop("white"),
+      new Queen("white"),
+      new King("white"),
+      new Bishop("white"),
+      new Knight("white"),
+      new Rook("white")
+    ]
+  ];
 }
 
 Board.prototype.setPosition = function(row, col, piece) {

@@ -15,6 +15,10 @@ function GameBoard(props) {
     setBoard(data);
   });
 
+  const reset = event => {
+    io.emit("reset");
+  };
+
   const handleClick = (event, position) => {
     /* if we're not already in move state and a piece occupies the clicked square, move us into move state */
     if (moveState === false) {
@@ -53,6 +57,9 @@ function GameBoard(props) {
 
   return (
     <div className="container game-board">
+      <button className="btn btn-lg" onClick={reset}>
+        Reset
+      </button>
       {board.map((row, rowIndex) => {
         return (
           <div key={rowIndex} className="row">
