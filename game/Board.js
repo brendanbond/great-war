@@ -21,7 +21,7 @@ const EMPTY = -1;
 // ];
 
 function Board(grid) {
-  this.grid = grid || [
+  const DEFAULT_SETUP = [
     [
       new Rook("black"),
       new Knight("black"),
@@ -68,6 +68,8 @@ function Board(grid) {
       new Rook("white")
     ]
   ];
+
+  this.board = grid || DEFAULT_SETUP;
 }
 
 Board.prototype.setPosition = function(row, col, piece) {
