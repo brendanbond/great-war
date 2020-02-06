@@ -43,10 +43,23 @@ function GameBoard() {
           return;
         }
       }
-
       setMoveState(false);
       setSelectedSquare(position);
     }
+  };
+
+  const squareIsHighlighted = (row, col) => {
+    if (selectedSquare) {
+      let piece = board[selectedSquare[0]][selectedSquare[1]];
+      if (piece.actions) {
+        for (let i = 0; i < piece.actions.moves.length; ++i) {
+          if (arraysAreEqual([row, col], piece.actions.moves[i])) {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
   };
 
   return (
@@ -58,23 +71,6 @@ function GameBoard() {
         return (
           <div key={rowIndex} className="row">
             {row.map((col, colIndex) => {
-              let highlighted = false;
-              if (selectedSquare) {
-                let piece = board[selectedSquare[0]][selectedSquare[1]];
-                if (piece.actions) {
-                  for (let i = 0; i < piece.actions.moves.length; ++i) {
-                    if (
-                      arraysAreEqual(
-                        [rowIndex, colIndex],
-                        piece.actions.moves[i]
-                      )
-                    ) {
-                      highlighted = true;
-                      break;
-                    }
-                  }
-                }
-              }
               return (
                 <GameSquare
                   onClick={() => {
@@ -86,10 +82,8 @@ function GameBoard() {
                   selected={
                     selectedSquare &&
                     arraysAreEqual([rowIndex, colIndex], selectedSquare)
-                      ? true
-                      : false
                   }
-                  highlighted={highlighted}
+                  highlighted={squareIsHighlighted(rowIndex, colIndex)}
                   colored={(rowIndex + colIndex) % 2}
                 />
               );

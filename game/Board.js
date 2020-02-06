@@ -7,19 +7,6 @@ const Rook = require("./Rook");
 
 const EMPTY = -1;
 
-//prettier-ignore
-// const DEFAULT_SETUP = [
-//   [EMPTY, EMPTY, EMPTY, EMPTY, new King("black"), EMPTY, EMPTY, EMPTY, EMPTY],
-//   [new Pawn("black"), new Pawn("black"), new Pawn("black"), new Pawn("black"), new Pawn("black"), new Pawn("black"), new Pawn("black"), new Pawn("black"), new Pawn("black")],
-//   [EMPTY, EMPTY, EMPTY, EMPTY, new Rook("black"), EMPTY, EMPTY, EMPTY, EMPTY],
-//   [EMPTY, EMPTY, EMPTY, EMPTY, new Bishop("black"), EMPTY, EMPTY, EMPTY, EMPTY],
-//   [EMPTY, EMPTY, EMPTY, EMPTY, new Knight("white"), EMPTY, EMPTY, EMPTY, EMPTY],
-//   [EMPTY, EMPTY, EMPTY, EMPTY, new Queen("white"), EMPTY, EMPTY, EMPTY, EMPTY],
-//   [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
-//   [new Pawn("white"), new Pawn("white"), new Pawn("white"), new Pawn("white"), new Pawn("white"), new Pawn("white"), new Pawn("white"), new Pawn("white"), new Pawn("white")],
-//   [EMPTY, EMPTY, EMPTY, EMPTY, new King("white"), EMPTY, EMPTY, EMPTY, EMPTY]
-// ];
-
 function Board(grid) {
   const DEFAULT_SETUP = [
     [
@@ -69,7 +56,7 @@ function Board(grid) {
     ]
   ];
 
-  this.board = grid || DEFAULT_SETUP;
+  this.grid = grid || DEFAULT_SETUP;
 }
 
 Board.prototype.setPosition = function(row, col, piece) {
