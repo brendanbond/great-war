@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import GameSquare from "./GameSquare";
+import GameRow from "./GameRow";
 import { arraysAreEqual } from "../utils";
 import { useSocketConnection } from "../hooks/useSocketConnection";
 
@@ -68,28 +68,7 @@ function GameBoard() {
         Reset
       </button>
       {board.map((row, rowIndex) => {
-        return (
-          <div key={rowIndex} className="row">
-            {row.map((col, colIndex) => {
-              return (
-                <GameSquare
-                  onClick={() => {
-                    handleClick(event, [rowIndex, colIndex]);
-                  }}
-                  key={colIndex}
-                  value={col.symbol}
-                  position={[rowIndex, colIndex]}
-                  selected={
-                    selectedSquare &&
-                    arraysAreEqual([rowIndex, colIndex], selectedSquare)
-                  }
-                  highlighted={squareIsHighlighted(rowIndex, colIndex)}
-                  colored={(rowIndex + colIndex) % 2}
-                />
-              );
-            })}
-          </div>
-        );
+        return <GameRow />;
       })}
     </div>
   );
