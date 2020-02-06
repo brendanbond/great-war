@@ -1,6 +1,23 @@
 import React from "react";
+import PropTypes from "prop-types";
+import GameSquare from "./GameSquare";
+import { arraysAreEqual } from "../utils";
 
-function GameRow() {
+function GameRow({ row, rowIndex, handleClick, selectedSquare, board }) {
+  const squareIsHighlighted = (row, col) => {
+    if (selectedSquare) {
+      let piece = board[selectedSquare[0]][selectedSquare[1]];
+      if (piece.actions) {
+        for (let i = 0; i < piece.actions.moves.length; ++i) {
+          if (arraysAreEqual([row, col], piece.actions.moves[i])) {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
+  };
+
   return (
     <div key={rowIndex} className="row">
       {row.map((col, colIndex) => {
@@ -9,7 +26,7 @@ function GameRow() {
             onClick={() => {
               handleClick(event, [rowIndex, colIndex]);
             }}
-            key={colIndex}
+            key={JSON.stringify([rowIndex, colIndex])}
             value={col.symbol}
             position={[rowIndex, colIndex]}
             selected={
@@ -24,5 +41,13 @@ function GameRow() {
     </div>
   );
 }
+
+GameRow.propTypes = {
+  row: PropTypes.array,
+  rowIndex: PropTypes.number,
+  handleClick: PropTypes.func,
+  selectedSquare: PropTypes.bool,
+  board: PropTypes.array
+};
 
 export default GameRow;

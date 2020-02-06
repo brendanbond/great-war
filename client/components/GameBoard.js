@@ -48,20 +48,6 @@ function GameBoard() {
     }
   };
 
-  const squareIsHighlighted = (row, col) => {
-    if (selectedSquare) {
-      let piece = board[selectedSquare[0]][selectedSquare[1]];
-      if (piece.actions) {
-        for (let i = 0; i < piece.actions.moves.length; ++i) {
-          if (arraysAreEqual([row, col], piece.actions.moves[i])) {
-            return true;
-          }
-        }
-      }
-    }
-    return false;
-  };
-
   return (
     <div className="container game-board">
       <button className="btn btn-lg" onClick={reset}>
