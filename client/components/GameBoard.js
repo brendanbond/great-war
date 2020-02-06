@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import GameSquare from "./GameSquare";
 import { arraysAreEqual } from "../utils";
 import { useSocketConnection } from "../hooks/useSocketConnection";

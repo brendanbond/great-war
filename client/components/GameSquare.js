@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 function GameSquare(props) {
   return (
@@ -15,5 +16,13 @@ function GameSquare(props) {
     </div>
   );
 }
+
+GameSquare.propTypes = {
+  selected: PropTypes.bool,
+  highlighted: PropTypes.bool,
+  colored: PropTypes.number,
+  onClick: PropTypes.func,
+  value: PropTypes.string
+};
 
 export default GameSquare;
