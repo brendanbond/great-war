@@ -60,6 +60,8 @@ function GameBoard() {
             row={row}
             rowIndex={rowIndex}
             handleClick={handleClick}
+            selectedSquare={selectedSquare}
+            board={board}
           />
         );
       })}

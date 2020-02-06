@@ -46,7 +46,7 @@ GameRow.propTypes = {
   row: PropTypes.array,
   rowIndex: PropTypes.number,
   handleClick: PropTypes.func,
-  selectedSquare: PropTypes.bool,
+  selectedSquare: PropTypes.array,
   board: PropTypes.array
 };
 
