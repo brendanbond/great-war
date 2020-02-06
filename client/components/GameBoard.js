@@ -1,19 +1,13 @@
 import React, { useState, useEffect } from "react";
-import SocketIOClient from "socket.io-client";
 import GameSquare from "./GameSquare";
 import { arraysAreEqual } from "../utils";
-
-const endpoint = "http://localhost:5000";
-const io = SocketIOClient(endpoint);
+import { useSocketConnection } from "../hooks/useSocketConnection";
 
 function GameBoard() {
   const [board, setBoard] = useState([]);
   const [selectedSquare, setSelectedSquare] = useState(null);
   const [moveState, setMoveState] = useState(false);
-
-  io.on("boardUpdate", data => {
-    setBoard(data);
-  });
+  const { io } = useSocketConnection({ setBoard });
 
   const reset = () => {
     io.emit("reset");
