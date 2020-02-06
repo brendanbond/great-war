@@ -54,7 +54,14 @@ function GameBoard() {
         Reset
       </button>
       {board.map((row, rowIndex) => {
-        return <GameRow />;
+        return (
+          <GameRow
+            key={rowIndex}
+            row={row}
+            rowIndex={rowIndex}
+            handleClick={handleClick}
+          />
+        );
       })}
     </div>
   );

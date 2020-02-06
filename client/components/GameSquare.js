@@ -12,7 +12,7 @@ function GameSquare(props) {
       }
       onClick={props.onClick}
     >
-      {props.value}
+      {props.symbol}
     </div>
   );
 }
@@ -22,7 +22,7 @@ GameSquare.propTypes = {
   highlighted: PropTypes.bool,
   colored: PropTypes.number,
   onClick: PropTypes.func,
-  value: PropTypes.string
+  symbol: PropTypes.string
 };
 
 export default GameSquare;

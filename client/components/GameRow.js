@@ -27,7 +27,7 @@ function GameRow({ row, rowIndex, handleClick, selectedSquare, board }) {
               handleClick(event, [rowIndex, colIndex]);
             }}
             key={JSON.stringify([rowIndex, colIndex])}
-            value={col.symbol}
+            symbol={col.symbol}
             position={[rowIndex, colIndex]}
             selected={
               selectedSquare &&
