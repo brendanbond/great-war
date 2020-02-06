@@ -6,7 +6,7 @@ import { arraysAreEqual } from "../utils";
 const endpoint = "http://localhost:5000";
 const io = SocketIOClient(endpoint);
 
-function GameBoard(props) {
+function GameBoard() {
   const [board, setBoard] = useState([]);
   const [selectedSquare, setSelectedSquare] = useState(null);
   const [moveState, setMoveState] = useState(false);
@@ -15,7 +15,7 @@ function GameBoard(props) {
     setBoard(data);
   });
 
-  const reset = event => {
+  const reset = () => {
     io.emit("reset");
   };
 
