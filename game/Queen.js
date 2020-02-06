@@ -3,6 +3,7 @@ const utils = require("./utils");
 function Queen(color) {
   this.id = "Q";
   this.color = color;
+  this.symbol = this.color == "white" ? "\u2655" : "\u265b";
 }
 
 Queen.prototype.getActions = function(board, row, col) {

@@ -3,6 +3,7 @@ const utils = require("./utils");
 function Knight(color) {
   this.id = "N";
   this.color = color;
+  this.symbol = this.color == "white" ? "\u2658" : "\u265e";
 }
 
 Knight.prototype.getActions = function(board, row, col) {

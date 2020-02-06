@@ -30,6 +30,11 @@ io.on("connection", socket => {
     socket.emit("boardUpdate", game.getBoardState());
   });
 
+  socket.on("reset", () => {
+    game.reset();
+    socket.emit("boardUpdate", game.getBoardState());
+  });
+
   socket.on("disconnect", () => {
     console.log("Client disconnected.");
   });

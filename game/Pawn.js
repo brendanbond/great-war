@@ -1,6 +1,7 @@
 function Pawn(color) {
   this.id = "P";
   this.color = color;
+  this.symbol = this.color == "white" ? "\u2659" : "\u265f";
   this.opening = true;
 }
 

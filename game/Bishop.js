@@ -3,6 +3,7 @@ const utils = require("./utils");
 function Bishop(color) {
   this.id = "B";
   this.color = color;
+  this.symbol = this.color == "white" ? "\u2657" : "\u265d";
 }
 
 Bishop.prototype.getActions = function(board, row, col) {

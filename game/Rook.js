@@ -3,6 +3,7 @@ const utils = require("./utils");
 function Rook(color) {
   this.id = "R";
   this.color = color;
+  this.symbol = this.color == "white" ? "\u2656" : "\u265c";
 }
 
 Rook.prototype.getActions = function(board, row, col) {

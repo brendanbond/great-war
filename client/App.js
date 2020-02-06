@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import SocketIOClient from "socket.io-client";
 import GameBoard from "./components/GameBoard";
 import "./App.css";
 
