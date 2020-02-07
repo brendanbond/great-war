@@ -1,21 +1,15 @@
-import React, { useState, useEffect } from "react";
-import SocketIOClient from "socket.io-client";
-import GameSquare from "./GameSquare";
+import React, { useState } from "react";
+import GameRow from "./GameRow";
 import { arraysAreEqual } from "../utils";
+import { useSocketConnection } from "../hooks/useSocketConnection";
 
-const endpoint = "http://localhost:5000";
-const io = SocketIOClient(endpoint);
-
-function GameBoard(props) {
+function GameBoard() {
   const [board, setBoard] = useState([]);
   const [selectedSquare, setSelectedSquare] = useState(null);
   const [moveState, setMoveState] = useState(false);
+  const { io } = useSocketConnection({ setBoard });
 
-  io.on("boardUpdate", data => {
-    setBoard(data);
-  });
-
-  const reset = event => {
+  const reset = () => {
     io.emit("reset");
   };
 
@@ -49,7 +43,6 @@ function GameBoard(props) {
           return;
         }
       }
-
       setMoveState(false);
       setSelectedSquare(position);
     }
@@ -62,45 +55,14 @@ function GameBoard(props) {
       </button>
       {board.map((row, rowIndex) => {
         return (
-          <div key={rowIndex} className="row">
-            {row.map((col, colIndex) => {
-              let highlighted = false;
-              if (selectedSquare) {
-                let piece = board[selectedSquare[0]][selectedSquare[1]];
-                if (piece.actions) {
-                  for (let i = 0; i < piece.actions.moves.length; ++i) {
-                    if (
-                      arraysAreEqual(
-                        [rowIndex, colIndex],
-                        piece.actions.moves[i]
-                      )
-                    ) {
-                      highlighted = true;
-                      break;
-                    }
-                  }
-                }
-              }
-              return (
-                <GameSquare
-                  onClick={() => {
-                    handleClick(event, [rowIndex, colIndex]);
-                  }}
-                  key={colIndex}
-                  value={col.symbol}
-                  position={[rowIndex, colIndex]}
-                  selected={
-                    selectedSquare &&
-                    arraysAreEqual([rowIndex, colIndex], selectedSquare)
-                      ? true
-                      : false
-                  }
-                  highlighted={highlighted}
-                  colored={(rowIndex + colIndex) % 2}
-                />
-              );
-            })}
-          </div>
+          <GameRow
+            key={rowIndex}
+            row={row}
+            rowIndex={rowIndex}
+            handleClick={handleClick}
+            selectedSquare={selectedSquare}
+            board={board}
+          />
         );
       })}
     </div>
