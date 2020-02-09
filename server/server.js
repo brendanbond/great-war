@@ -9,7 +9,7 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 /* TODO: we will likely need an array of game objects to support multiple concurrent games */
-const game = new Game();
+let game = new Game();
 
 app.use(morgan("dev"));
 app.use(express.static("dist"));
@@ -23,6 +23,7 @@ const io = socketIO(server);
 
 io.on("connection", socket => {
   console.log("New client connected.");
+
   socket.emit("boardUpdate", game.getBoardState());
 
   socket.on("executeMove", data => {

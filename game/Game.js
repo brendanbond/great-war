@@ -1,9 +1,9 @@
 const Board = require("./Board");
 const utils = require("./utils");
-const uuidv4 = require("uuid/v4");
+const shortid = require("shortid");
 
 function Game(grid) {
-  this.id = uuidv4();
+  this.id = shortid();
   this.board = new Board(grid);
 
   this.white = {
