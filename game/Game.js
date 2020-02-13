@@ -1,9 +1,9 @@
 const Board = require("./Board");
 const utils = require("./utils");
-const uuidv4 = require("uuid/v4");
+const shortid = require("shortid");
 
 function Game(grid) {
-  this.id = uuidv4();
+  this.id = shortid();
   this.board = new Board(grid);
 
   this.white = {
@@ -65,7 +65,7 @@ Game.prototype.validateMove = function(row, col, destRow, destCol) {
   let validMove = false;
   let actions = this.board.positionAt(row, col).actions;
 
-  for (move of actions.moves) {
+  for (let move of actions.moves) {
     if (utils.arraysAreEqual([destRow, destCol], move)) {
       validMove = true;
       break;
@@ -73,7 +73,7 @@ Game.prototype.validateMove = function(row, col, destRow, destCol) {
   }
 
   if (actions.attacks && this.board.positionIsOccupied) {
-    for (attack of actions.attacks) {
+    for (let attack of actions.attacks) {
       if (utils.arraysAreEqual([destRow, destCol], attack)) {
         validMove = true;
         break;
@@ -121,8 +121,12 @@ Game.prototype.executeMove = function(row, col, destRow, destCol) {
   }
 };
 
-Game.prototype.getBoardState = function() {
-  return this.board.grid;
+Game.prototype.getGameState = function() {
+  return {
+    id: this.id,
+    board: this.board.grid,
+    player: this.currentPlayer
+  };
 };
 
 module.exports = Game;
