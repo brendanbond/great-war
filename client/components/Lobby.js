@@ -24,7 +24,7 @@ function Lobby() {
               <Link
                 to={`/game/${gameId}`}
                 onClick={() => {
-                  emitEvent("requestJoinGame", gameId);
+                  emitEvent("requestJoinGame", { gameId });
                 }}
               >
                 {gameId}

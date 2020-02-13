@@ -24,9 +24,9 @@ function useProvideGameState() {
 
   useEffect(() => {
     if (!eventHandlersAreSetUp) {
-      registerEventHandler("gameState", data => {
+      registerEventHandler("gameState", gameState => {
         console.log("gameState msg received");
-        setGameState(data);
+        setGameState(gameState);
       });
       setEventHandlersAreSetUp(true);
     }

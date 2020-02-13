@@ -85,7 +85,7 @@ Game.prototype.validateMove = function(row, col, destRow, destCol) {
 };
 
 /* execute a move */
-Game.prototype.executeMove = function(row, col, destRow, destCol) {
+Game.prototype.executeMove = function({ row, col, destRow, destCol }) {
   if (this.validateMove(row, col, destRow, destCol)) {
     let piece = this.board.positionAt(row, col);
 

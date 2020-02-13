@@ -1,4 +1,4 @@
-import React, { useContext, createContext } from "react";
+import React, { useContext, createContext, useState, useEffect } from "react";
 import SocketIOClient from "socket.io-client";
 import PropTypes from "prop-types";
 
@@ -19,6 +19,8 @@ function useSocket() {
 }
 
 function useSocketProvider() {
+  const [sessionId, setSessionId] = useState(null);
+
   const registerEventHandler = (event, callback) => {
     if (typeof event !== "string") {
       throw new Error("Event passed to registerEventHandler must be a string");
@@ -41,7 +43,14 @@ function useSocketProvider() {
     io.emit(event, data);
   };
 
-  return { registerEventHandler, emitEvent };
+  useEffect(() => {
+    if (!sessionId) {
+      setSessionId(io.id);
+      console.log("io.id", io.id);
+    }
+  }, [sessionId]);
+
+  return { registerEventHandler, emitEvent, sessionId };
 }
 
 SocketProvider.propTypes = {

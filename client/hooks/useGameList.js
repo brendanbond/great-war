@@ -24,8 +24,8 @@ function useProvideGameList() {
 
   useEffect(() => {
     if (!eventHandlersAreSetUp) {
-      registerEventHandler("listUpdate", data => {
-        setGameList(data);
+      registerEventHandler("listUpdate", gameList => {
+        setGameList(gameList);
       });
       setEventHandlersAreSetUp(true);
     }

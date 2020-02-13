@@ -23,42 +23,41 @@ let games = {};
 const createGame = () => {
   let newGame = new Game();
   games[newGame.id] = newGame;
-  console.log("New game created with ID", newGame.id);
 };
 
 io.on("connection", socket => {
-  console.log("New client connected.");
   socket.join("lobby");
-  socket.emit("listUpdate", Object.keys(games));
+  io.to("lobby").emit("listUpdate", Object.keys(games));
 
   socket.on("createGame", () => {
     createGame();
-    socket.emit("listUpdate", Object.keys(games));
+    io.emit("listUpdate", Object.keys(games));
   });
 
-  socket.on("requestJoinGame", gameId => {
-    console.log("requestJoinGame msg received");
+  socket.on("requestJoinGame", ({ gameId }) => {
     if (games[gameId]) {
-      socket.emit("gameState", games[gameId].getGameState());
+      socket.leave("lobby", error => {
+        if (error) {
+          throw new Error(error);
+        } else {
+          socket.join(gameId);
+          io.to(gameId).emit("gameState", games[gameId].getGameState());
+        }
+      });
     } else {
       /* TODO: more error handling, we should really think about how to execute this now */
       throw new Error("Tried to join a game that doesn't exist.");
     }
   });
 
-  /* TODO: I think we should change all of these "data" objects to something more expressive */
-  socket.on("executeMove", data => {
-    games[data.id].executeMove(data.row, data.col, data.destRow, data.destCol);
-    socket.emit("gameState", games[data.id].getGameState());
+  socket.on("executeMove", moveData => {
+    games[moveData.id].executeMove(moveData);
+    io.emit("gameState", games[moveData.id].getGameState());
   });
 
   socket.on("reset", data => {
     games[data.id].reset();
-    socket.emit("gameState", games[data.id].getGameState());
-  });
-
-  socket.on("disconnect", () => {
-    console.log("Client disconnected.");
+    io.emit("gameState", games[data.id].getGameState());
   });
 });
 
