@@ -125,7 +125,12 @@ Game.prototype.getGameState = function() {
   return {
     id: this.id,
     board: this.board.grid,
-    player: this.currentPlayer
+    players: {
+      white: this.white,
+      black: this.black
+    },
+    moveNumber: this.moveNumber,
+    currentPlayer: this.currentPlayer
   };
 };
 

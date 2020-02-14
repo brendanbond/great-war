@@ -31,7 +31,14 @@ io.on("connection", socket => {
 
   socket.on("createGame", () => {
     createGame();
-    io.emit("listUpdate", Object.keys(games));
+    io.to("lobby").emit("listUpdate", Object.keys(games));
+  });
+
+  socket.on("getGameState", ({ gameId }) => {
+    console.log(
+      `Received getGameState msg from ${socket.id} concerning game ${gameId}`
+    );
+    io.to(`${socket.id}`).emit("gameState", games[gameId].getGameState());
   });
 
   socket.on("requestJoinGame", ({ gameId }) => {

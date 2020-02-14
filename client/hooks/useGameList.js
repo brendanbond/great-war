@@ -19,7 +19,7 @@ function useGameList() {
 
 function useProvideGameList() {
   const [gameList, setGameList] = useState();
-  const { registerEventHandler } = useSocket();
+  const { registerEventHandler, emitEvent } = useSocket();
   const [eventHandlersAreSetUp, setEventHandlersAreSetUp] = useState(false);
 
   useEffect(() => {

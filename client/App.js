@@ -10,21 +10,21 @@ import "./App.css";
 function App() {
   return (
     <SocketProvider>
-      <Router>
-        <Switch>
-          <Route exact path="/">
-            <GameListProvider>
-              <Lobby />
-            </GameListProvider>
-          </Route>
-          {/* TODO: make these redirect if not accessed from the lobby */}
-          <Route path="/game/:gameid">
-            <GameStateProvider>
+      <GameStateProvider>
+        <Router>
+          <Switch>
+            <Route exact path="/">
+              <GameListProvider>
+                <Lobby />
+              </GameListProvider>
+            </Route>
+            {/* TODO: make these redirect if not accessed from the lobby */}
+            <Route path="/game/:gameid">
               <GameBoard />
-            </GameStateProvider>
-          </Route>
-        </Switch>
-      </Router>
+            </Route>
+          </Switch>
+        </Router>
+      </GameStateProvider>
     </SocketProvider>
   );
 }

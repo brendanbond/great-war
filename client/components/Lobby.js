@@ -1,12 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
+import GameInfoModal from "./GameInfoModal";
 import { useGameList } from "../hooks/useGameList";
+import { useGameState } from "../hooks/useGameState";
 import { useSocket } from "../hooks/useSocket";
 
 function Lobby() {
   const { gameList } = useGameList();
+  const { gameState, getGameState } = useGameState();
   const { emitEvent } = useSocket();
+  const [showGameModal, setShowGameModal] = useState(null);
 
   return gameList ? (
     <div>
@@ -21,21 +24,27 @@ function Lobby() {
         {gameList.map((gameId, index) => {
           return (
             <li key={index}>
-              <Link
-                to={`/game/${gameId}`}
+              <button
+                className="btn btn-primary"
                 onClick={() => {
-                  emitEvent("requestJoinGame", { gameId });
+                  getGameState(gameId);
+                  setShowGameModal(gameId);
                 }}
               >
                 {gameId}
-              </Link>
+              </button>
             </li>
           );
         })}
       </ul>
+      <GameInfoModal
+        show={Boolean(showGameModal)}
+        onHide={() => setShowGameModal(null)}
+        gameState={gameState}
+      />
     </div>
   ) : (
-    <div></div>
+    <div>{/* TODO: add loader here */}</div>
   );
 }
 

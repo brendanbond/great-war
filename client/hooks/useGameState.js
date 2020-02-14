@@ -20,7 +20,7 @@ function useGameState() {
 function useProvideGameState() {
   const [gameState, setGameState] = useState(null);
   const [eventHandlersAreSetUp, setEventHandlersAreSetUp] = useState(false);
-  const { registerEventHandler } = useSocket();
+  const { registerEventHandler, emitEvent } = useSocket();
 
   useEffect(() => {
     if (!eventHandlersAreSetUp) {
@@ -28,11 +28,16 @@ function useProvideGameState() {
         console.log("gameState msg received");
         setGameState(gameState);
       });
+
       setEventHandlersAreSetUp(true);
     }
   }, [eventHandlersAreSetUp, registerEventHandler]);
 
-  return { gameState };
+  const getGameState = gameId => {
+    emitEvent("getGameState", { gameId });
+  };
+
+  return { gameState, getGameState };
 }
 
 GameStateProvider.propTypes = {
