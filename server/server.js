@@ -2,8 +2,14 @@ const express = require("express");
 const http = require("http");
 const morgan = require("morgan");
 const socketIO = require("socket.io");
-
-const Game = require("../game/Game");
+const {
+  createGame,
+  getGameList,
+  getGameState,
+  addPlayerToGame,
+  gameIsReadyToBegin,
+  executeMove
+} = require("./gameLayer");
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -18,53 +24,51 @@ app.get("/", (req, res) => {
 const server = http.createServer(app);
 const io = socketIO(server);
 
-let games = {};
-
-const createGame = () => {
-  let newGame = new Game();
-  games[newGame.id] = newGame;
-};
-
 io.on("connection", socket => {
+  /* When the socket connects, it enters through the lobby and its id is assigned to a Player */
   socket.join("lobby");
-  io.to("lobby").emit("listUpdate", Object.keys(games));
+  io.to("lobby").emit("listUpdate", getGameList());
 
+  /* From the lobby, socket can create a game... */
   socket.on("createGame", () => {
     createGame();
-    io.to("lobby").emit("listUpdate", Object.keys(games));
+    io.to("lobby").emit("listUpdate", getGameList());
   });
 
+  /* ...or receive info about a game it may want to join... */
+  /* TODO: this might introduce some security issues, e.g. spoofing a socket id */
   socket.on("getGameState", ({ gameId }) => {
-    console.log(
-      `Received getGameState msg from ${socket.id} concerning game ${gameId}`
-    );
-    io.to(`${socket.id}`).emit("gameState", games[gameId].getGameState());
+    io.to(`${socket.id}`).emit("gameState", getGameState(gameId));
   });
 
+  /* ...or request to join a specific game. */
   socket.on("requestJoinGame", ({ gameId }) => {
-    if (games[gameId]) {
-      socket.leave("lobby", error => {
-        if (error) {
-          throw new Error(error);
-        } else {
-          socket.join(gameId);
-          io.to(gameId).emit("gameState", games[gameId].getGameState());
-        }
-      });
-    } else {
-      /* TODO: more error handling, we should really think about how to execute this now */
-      throw new Error("Tried to join a game that doesn't exist.");
+    console.log(`Socket ${socket.id} has requested to join game ${gameId}.`);
+    let gameToJoin = getGameState(gameId);
+    if (!gameToJoin) {
+      io.to(`${socket.id}`).emit("gameDoesNotExist", { gameId });
+    }
+
+    if (gameToJoin.inProgress) {
+      io.to(`${socket.id}`).emit("gameIsInProgress", { gameId });
+    }
+
+    if (gameToJoin.players.length >= 2) {
+      throw new Error(
+        `Socket ${socket.id} tried to join a game that is full but not yet in progress.`
+      );
+    }
+
+    addPlayerToGame(socket.id, gameId);
+    socket.leave("lobby").join(`${gameId}`);
+    if (gameIsReadyToBegin(gameId)) {
+      io.to(`${gameId}`).emit("gameIsReadyToBegin");
     }
   });
 
-  socket.on("executeMove", moveData => {
-    games[moveData.id].executeMove(moveData);
-    io.emit("gameState", games[moveData.id].getGameState());
-  });
-
-  socket.on("reset", data => {
-    games[data.id].reset();
-    io.emit("gameState", games[data.id].getGameState());
+  socket.on("executeMove", ({ gameId, row, col, destRow, destCol }) => {
+    executeMove({ gameId, row, col, destRow, destCol });
+    io.to(`${gameId}`).emit("gameState", getGameState(gameId));
   });
 });
 

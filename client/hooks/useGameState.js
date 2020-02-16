@@ -19,6 +19,7 @@ function useGameState() {
 
 function useProvideGameState() {
   const [gameState, setGameState] = useState(null);
+  const [gameIsReadyToBegin, setGameIsReadyToBegin] = useState(false);
   const [eventHandlersAreSetUp, setEventHandlersAreSetUp] = useState(false);
   const { registerEventHandler, emitEvent } = useSocket();
 
@@ -29,6 +30,11 @@ function useProvideGameState() {
         setGameState(gameState);
       });
 
+      registerEventHandler("gameIsReadyToBegin", () => {
+        console.log("gameIsReadyToBegin msg received.");
+        setGameIsReadyToBegin(true);
+      });
+
       setEventHandlersAreSetUp(true);
     }
   }, [eventHandlersAreSetUp, registerEventHandler]);
@@ -37,7 +43,7 @@ function useProvideGameState() {
     emitEvent("getGameState", { gameId });
   };
 
-  return { gameState, getGameState };
+  return { gameState, getGameState, gameIsReadyToBegin };
 }
 
 GameStateProvider.propTypes = {

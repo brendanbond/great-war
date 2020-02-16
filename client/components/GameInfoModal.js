@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import Modal from "react-bootstrap/Modal";
 
 /* TODO: we need to implement our own modal because BootStrap is pissing me off */
-function GameInfoModal({ show, onHide, gameState }) {
+function GameInfoModal({ show, onHide, joinGame, handleClose, gameState }) {
   return gameState ? (
     <Modal
       show={show}
@@ -18,6 +18,14 @@ function GameInfoModal({ show, onHide, gameState }) {
         </Modal.Title>
       </Modal.Header>
       <Modal.Body></Modal.Body>
+      <Modal.Footer>
+        <button className="btn btn-secondary" onClick={handleClose}>
+          Close
+        </button>
+        <button className="btn btn-primary" onClick={joinGame}>
+          Join Game
+        </button>
+      </Modal.Footer>
     </Modal>
   ) : (
     <Modal
@@ -36,7 +44,9 @@ GameInfoModal.propTypes = {
   show: PropTypes.bool,
   onHide: PropTypes.func,
   gameId: PropTypes.string,
-  gameState: PropTypes.object
+  gameState: PropTypes.object,
+  handleClose: PropTypes.func,
+  joinGame: PropTypes.func
 };
 
 export default GameInfoModal;

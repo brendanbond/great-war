@@ -6,46 +6,13 @@ function Game(grid) {
   this.id = shortid();
   this.board = new Board(grid);
 
-  this.white = {
-    cards: [],
-    captures: [],
-    inCheck: false
-  };
-
-  this.black = {
-    cards: [],
-    captures: [],
-    inCheck: false
-  };
-
-  this.opening = true;
+  this.players = [];
+  this.inProgress = false;
   this.moveNumber = 1;
-  this.currentPlayer = this.white;
+  this.currentPlayer = null;
 
   this.updateBoard();
 }
-
-Game.prototype.reset = function(grid) {
-  this.board = new Board(grid);
-
-  this.white = {
-    cards: [],
-    captures: [],
-    inCheck: false
-  };
-
-  this.black = {
-    cards: [],
-    captures: [],
-    inCheck: false
-  };
-
-  this.opening = true;
-  this.moveNumber = 1;
-  this.currentPlayer = this.white;
-
-  this.updateBoard();
-};
 
 /* update the board with available moves */
 Game.prototype.updateBoard = function() {
@@ -119,19 +86,6 @@ Game.prototype.executeMove = function({ row, col, destRow, destCol }) {
     /* TODO: I'm not really clear on error checking and how we should handle */
     throw new Error("Move not valid.");
   }
-};
-
-Game.prototype.getGameState = function() {
-  return {
-    id: this.id,
-    board: this.board.grid,
-    players: {
-      white: this.white,
-      black: this.black
-    },
-    moveNumber: this.moveNumber,
-    currentPlayer: this.currentPlayer
-  };
 };
 
 module.exports = Game;
