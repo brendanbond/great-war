@@ -10,16 +10,19 @@ function Lobby() {
   const { gameList } = useGameList();
   const { gameState, getGameState } = useGameState();
   const { emitEvent } = useSocket();
-  const [showGameModal, setShowGameModal] = useState(null);
+  const [showGameModal, setShowGameModal] = useState(false);
+  const [gameId, setGameId] = useState(null);
   const history = useHistory();
 
   const joinGame = () => {
-    history.push(`/game/${showGameModal}`);
+    emitEvent("requestJoinGame", { gameId });
+    history.push(`/game/${gameId}`);
   };
 
   const handleClose = () => {
     setShowGameModal(null); // TODO: unlike when you click out of the modal, this handleClose method doesn't result in an animation
   };
+
   return gameList ? (
     <div>
       <div className="container text-center">
@@ -39,7 +42,8 @@ function Lobby() {
               className="btn btn-primary"
               onClick={() => {
                 getGameState(gameId);
-                setShowGameModal(gameId);
+                setShowGameModal(true);
+                setGameId(gameId);
               }}
             >
               {gameId}
@@ -49,8 +53,8 @@ function Lobby() {
       })}
 
       <GameInfoModal
-        show={Boolean(showGameModal)}
-        onHide={() => setShowGameModal(null)}
+        show={showGameModal}
+        onHide={() => setShowGameModal(false)}
         gameState={gameState}
         handleClose={handleClose}
         joinGame={joinGame}

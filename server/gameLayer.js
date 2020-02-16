@@ -41,5 +41,6 @@ exports.executeMove = ({ gameId, row, col, destRow, destCol }) => {
 };
 
 exports.gameIsReadyToBegin = gameId => {
+  console.log(games[gameId].players.length);
   return games[gameId].players.length === 2;
 };

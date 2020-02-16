@@ -60,8 +60,9 @@ io.on("connection", socket => {
     }
 
     addPlayerToGame(socket.id, gameId);
-    socket.leave("lobby").join(`${gameId}`);
+    socket.join(`${gameId}`).leave("lobby");
     if (gameIsReadyToBegin(gameId)) {
+      console.log("We checked, and game is ready to begin");
       io.to(`${gameId}`).emit("gameIsReadyToBegin");
     }
   });
