@@ -1,18 +1,18 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
+import Container from "react-bootstrap/Container";
 import GameRow from "./GameRow";
 import { useSocket } from "../hooks/useSocket";
-import { useGameState } from "../hooks/useGameState";
 import { arraysAreEqual } from "../utils";
 
-function GameBoard() {
+function GameBoard({ gameState, gameIsReadyToBegin }) {
   const [selectedSquare, setSelectedSquare] = useState(null);
   const [moveState, setMoveState] = useState(false);
   const { emitEvent } = useSocket();
-  const { gameState, gameIsReadyToBegin } = useGameState();
 
   /* TODO: atomize this */
   const handleClick = (event, position) => {
+    if (!gameIsReadyToBegin) return;
+
     if (moveState === false) {
       setSelectedSquare(position);
       /* TODO: check whose turn it is */
@@ -43,7 +43,7 @@ function GameBoard() {
 
   return gameIsReadyToBegin ? (
     gameState ? (
-      <div className="container game-board">
+      <Container className="game-board">
         {gameState.board.map((row, rowIndex) => {
           return (
             <GameRow
@@ -56,22 +56,13 @@ function GameBoard() {
             />
           );
         })}
-      </div>
+      </Container>
     ) : (
-      <div>Loading...</div>
+      <Container>Loading...</Container>
     )
   ) : (
-    <div>Waiting on player...</div>
+    <Container>Waiting on another player....</Container>
   );
 }
-
-GameBoard.propTypes = {
-  gameState: PropTypes.shape({
-    id: PropTypes.string,
-    board: PropTypes.array,
-    player: PropTypes.object
-  }),
-  io: PropTypes.object
-};
 
 export default GameBoard;

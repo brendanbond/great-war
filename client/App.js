@@ -4,7 +4,7 @@ import { SocketProvider } from "./hooks/useSocket";
 import { GameStateProvider } from "./hooks/useGameState";
 import { GameListProvider } from "./hooks/useGameList";
 import Lobby from "./components/Lobby";
-import GameBoard from "./components/GameBoard";
+import GameTable from "./components/GameTable";
 import "./App.css";
 
 function App() {
@@ -20,7 +20,7 @@ function App() {
             </Route>
             {/* TODO: make these redirect if not accessed from the lobby */}
             <Route path="/game/:gameid">
-              <GameBoard />
+              <GameTable />
             </Route>
           </Switch>
         </Router>

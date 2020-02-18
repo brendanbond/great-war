@@ -6,10 +6,24 @@ function Game(grid) {
   this.id = shortid();
   this.board = new Board(grid);
 
-  this.players = [];
+  this.white = {
+    title: "White",
+    user: null,
+    captures: [],
+    inCheck: false
+  };
+
+  this.black = {
+    title: "Black",
+    user: null,
+    captures: [],
+    inCheck: false
+  };
+
   this.inProgress = false;
+  this.isFull = false;
   this.moveNumber = 1;
-  this.currentPlayer = null;
+  this.currentPlayer = this.white;
 
   this.updateBoard();
 }
@@ -76,7 +90,7 @@ Game.prototype.executeMove = function({ row, col, destRow, destCol }) {
 
     /* update current player */
     this.currentPlayer =
-      this.currentPlayer == this.white ? this.black : this.white;
+      this.currentPlayer === this.white ? this.black : this.white;
 
     this.moveNumber++;
 
@@ -86,6 +100,25 @@ Game.prototype.executeMove = function({ row, col, destRow, destCol }) {
     /* TODO: I'm not really clear on error checking and how we should handle */
     throw new Error("Move not valid.");
   }
+};
+
+Game.prototype.addPlayer = function(playerId) {
+  if (this.white.user === null) {
+    this.white.user = playerId;
+  } else {
+    this.black.user = playerId;
+    this.isFull = true;
+  }
+};
+
+Game.prototype.prepareForStart = function() {
+  console.log("Game is preparing to start...");
+  if (!this.isFull) {
+    console.log("Game is not full, waiting on another player...");
+    return false;
+  }
+  this.currentPlayer = this.white;
+  return true;
 };
 
 module.exports = Game;

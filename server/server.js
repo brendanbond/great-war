@@ -6,8 +6,8 @@ const {
   createGame,
   getGameList,
   getGameState,
-  addPlayerToGame,
   gameIsReadyToBegin,
+  requestJoinGame,
   executeMove
 } = require("./gameLayer");
 
@@ -25,7 +25,7 @@ const server = http.createServer(app);
 const io = socketIO(server);
 
 io.on("connection", socket => {
-  /* When the socket connects, it enters through the lobby and its id is assigned to a Player */
+  /* When the socket connects, it enters through the lobby */
   socket.join("lobby");
   io.to("lobby").emit("listUpdate", getGameList());
 
@@ -44,32 +44,21 @@ io.on("connection", socket => {
   /* ...or request to join a specific game. */
   socket.on("requestJoinGame", ({ gameId }) => {
     console.log(`Socket ${socket.id} has requested to join game ${gameId}.`);
-    let gameToJoin = getGameState(gameId);
-    if (!gameToJoin) {
-      io.to(`${socket.id}`).emit("gameDoesNotExist", { gameId });
-    }
-
-    if (gameToJoin.inProgress) {
-      io.to(`${socket.id}`).emit("gameIsInProgress", { gameId });
-    }
-
-    if (gameToJoin.players.length >= 2) {
-      throw new Error(
-        `Socket ${socket.id} tried to join a game that is full but not yet in progress.`
-      );
-    }
-
-    addPlayerToGame(socket.id, gameId);
+    requestJoinGame(socket.id, gameId);
     socket.join(`${gameId}`).leave("lobby");
+    io.to(`${gameId}`).emit("gameState", getGameState(gameId));
     if (gameIsReadyToBegin(gameId)) {
-      console.log("We checked, and game is ready to begin");
       io.to(`${gameId}`).emit("gameIsReadyToBegin");
     }
   });
 
   socket.on("executeMove", ({ gameId, row, col, destRow, destCol }) => {
-    executeMove({ gameId, row, col, destRow, destCol });
+    executeMove({ playerId: socket.id, gameId, row, col, destRow, destCol });
     io.to(`${gameId}`).emit("gameState", getGameState(gameId));
+  });
+
+  socket.on("disconnect", () => {
+    console.log(`Client ${socket.id} disconnected.`);
   });
 });
 

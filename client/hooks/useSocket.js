@@ -21,6 +21,10 @@ function useSocket() {
 function useSocketProvider() {
   const [sessionId, setSessionId] = useState(null);
 
+  io.on("error", error => {
+    console.log("ERROR:", error.toString());
+  });
+
   const registerEventHandler = (event, callback) => {
     if (typeof event !== "string") {
       throw new Error("Event passed to registerEventHandler must be a string");
