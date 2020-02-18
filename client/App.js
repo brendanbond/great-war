@@ -4,27 +4,27 @@ import { SocketProvider } from "./hooks/useSocket";
 import { GameStateProvider } from "./hooks/useGameState";
 import { GameListProvider } from "./hooks/useGameList";
 import Lobby from "./components/Lobby";
-import GameBoard from "./components/GameBoard";
+import GameTable from "./components/GameTable";
 import "./App.css";
 
 function App() {
   return (
     <SocketProvider>
-      <Router>
-        <Switch>
-          <Route exact path="/">
-            <GameListProvider>
-              <Lobby />
-            </GameListProvider>
-          </Route>
-          {/* TODO: make these redirect if not accessed from the lobby */}
-          <Route path="/game/:gameid">
-            <GameStateProvider>
-              <GameBoard />
-            </GameStateProvider>
-          </Route>
-        </Switch>
-      </Router>
+      <GameStateProvider>
+        <Router>
+          <Switch>
+            <Route exact path="/">
+              <GameListProvider>
+                <Lobby />
+              </GameListProvider>
+            </Route>
+            {/* TODO: make these redirect if not accessed from the lobby */}
+            <Route path="/game/:gameid">
+              <GameTable />
+            </Route>
+          </Switch>
+        </Router>
+      </GameStateProvider>
     </SocketProvider>
   );
 }

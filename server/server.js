@@ -2,8 +2,14 @@ const express = require("express");
 const http = require("http");
 const morgan = require("morgan");
 const socketIO = require("socket.io");
-
-const Game = require("../game/Game");
+const {
+  createGame,
+  getGameList,
+  getGameState,
+  gameIsReadyToBegin,
+  requestJoinGame,
+  executeMove
+} = require("./gameLayer");
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -18,47 +24,41 @@ app.get("/", (req, res) => {
 const server = http.createServer(app);
 const io = socketIO(server);
 
-let games = {};
-
-const createGame = () => {
-  let newGame = new Game();
-  games[newGame.id] = newGame;
-  console.log("New game created with ID", newGame.id);
-};
-
 io.on("connection", socket => {
-  console.log("New client connected.");
+  /* When the socket connects, it enters through the lobby */
   socket.join("lobby");
-  socket.emit("listUpdate", Object.keys(games));
+  io.to("lobby").emit("listUpdate", getGameList());
 
+  /* From the lobby, socket can create a game... */
   socket.on("createGame", () => {
     createGame();
-    socket.emit("listUpdate", Object.keys(games));
+    io.to("lobby").emit("listUpdate", getGameList());
   });
 
-  socket.on("requestJoinGame", gameId => {
-    console.log("requestJoinGame msg received");
-    if (games[gameId]) {
-      socket.emit("gameState", games[gameId].getGameState());
-    } else {
-      /* TODO: more error handling, we should really think about how to execute this now */
-      throw new Error("Tried to join a game that doesn't exist.");
+  /* ...or receive info about a game it may want to join... */
+  /* TODO: this might introduce some security issues, e.g. spoofing a socket id */
+  socket.on("getGameState", ({ gameId }) => {
+    io.to(`${socket.id}`).emit("gameState", getGameState(gameId));
+  });
+
+  /* ...or request to join a specific game. */
+  socket.on("requestJoinGame", ({ gameId }) => {
+    console.log(`Socket ${socket.id} has requested to join game ${gameId}.`);
+    requestJoinGame(socket.id, gameId);
+    socket.join(`${gameId}`).leave("lobby");
+    io.to(`${gameId}`).emit("gameState", getGameState(gameId));
+    if (gameIsReadyToBegin(gameId)) {
+      io.to(`${gameId}`).emit("gameIsReadyToBegin");
     }
   });
 
-  /* TODO: I think we should change all of these "data" objects to something more expressive */
-  socket.on("executeMove", data => {
-    games[data.id].executeMove(data.row, data.col, data.destRow, data.destCol);
-    socket.emit("gameState", games[data.id].getGameState());
-  });
-
-  socket.on("reset", data => {
-    games[data.id].reset();
-    socket.emit("gameState", games[data.id].getGameState());
+  socket.on("executeMove", ({ gameId, row, col, destRow, destCol }) => {
+    executeMove({ playerId: socket.id, gameId, row, col, destRow, destCol });
+    io.to(`${gameId}`).emit("gameState", getGameState(gameId));
   });
 
   socket.on("disconnect", () => {
-    console.log("Client disconnected.");
+    console.log(`Client ${socket.id} disconnected.`);
   });
 });
 

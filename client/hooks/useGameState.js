@@ -19,20 +19,31 @@ function useGameState() {
 
 function useProvideGameState() {
   const [gameState, setGameState] = useState(null);
+  const [gameIsReadyToBegin, setGameIsReadyToBegin] = useState(false);
   const [eventHandlersAreSetUp, setEventHandlersAreSetUp] = useState(false);
-  const { registerEventHandler } = useSocket();
+  const { registerEventHandler, emitEvent } = useSocket();
 
   useEffect(() => {
     if (!eventHandlersAreSetUp) {
-      registerEventHandler("gameState", data => {
+      registerEventHandler("gameState", gameState => {
         console.log("gameState msg received");
-        setGameState(data);
+        setGameState(gameState);
       });
+
+      registerEventHandler("gameIsReadyToBegin", () => {
+        console.log("gameIsReadyToBegin msg received.");
+        setGameIsReadyToBegin(true);
+      });
+
       setEventHandlersAreSetUp(true);
     }
   }, [eventHandlersAreSetUp, registerEventHandler]);
 
-  return { gameState };
+  const getGameState = gameId => {
+    emitEvent("getGameState", { gameId });
+  };
+
+  return { gameState, getGameState, gameIsReadyToBegin };
 }
 
 GameStateProvider.propTypes = {
