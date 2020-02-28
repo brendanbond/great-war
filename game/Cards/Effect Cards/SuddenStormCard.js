@@ -2,7 +2,7 @@
   
 }
 
-SuddenStormCard.prototype.createStorm = (row, col) => {
+SuddenStormCard.prototype.createStorm = (board, row, col) => {
   if (board.isValidPosition(row, col) && !board.isOccupiedPosition(row, col)) {
     //make sure the space is valid and empty
     for (let r = row - 1; r <= row + 1; r++) {
