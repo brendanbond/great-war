@@ -14,3 +14,18 @@ exports.areOppositeColors = function(pieceA, pieceB) {
     (pieceA.color === "black" && pieceB.color === "white")
   );
 };
+
+/* TODO: How to determine the piece type */
+exports.isMassive = (target) => {
+  const massives = ['Dabbaba', 'Alfil', 'Rook', 'Massive Pawn'];
+  
+  /* TODO: Determine all massive pieces */
+  
+  return massives.includes(target.id);
+};
+
+exports.isRoyalty = (target) => {
+  const royalty = ['King', 'Queen', 'Prince', 'Princess', 'Ferz'];
+  
+  return royalty.includes(target.id);
+};
