@@ -4,7 +4,7 @@ function RockslideCard() {
   
 }
 
-RockslideCard.prototype.rockslide = (row, col, player) => {
+RockslideCard.prototype.rockslide = (board, row, col, player) => {
   if (board.isValidPosition(row, col)) {
     if (board.isOccupiedPosition(row, col)) {
       let target = board.positionAt(row, col);
