@@ -4,7 +4,7 @@ function RoyalArmorCard() {
   
 }
 
-RoyalArmorCard.prototype.enhance = (row, col, player) => {
+RoyalArmorCard.prototype.enhance = (board, row, col, player) => {
   if (board.isValidPosition(row, col) && board.isOccupiedPosition(row, col)) {
     let target = board.positionAt(row, col);
     
