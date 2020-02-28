@@ -4,7 +4,7 @@ function SidestepCard() {
   
 }
 
-SidestepCard.prototype.shift = (CurrRow, CurrCol, NewRow, NewCol, player) => {
+SidestepCard.prototype.shift = (board, CurrRow, CurrCol, NewRow, NewCol, player) => {
   if (board.isValidPosition(CurrRow, CurrCol) && board.isOccupiedPosition(CurrRow, CurrCol)) {
     let target = board.positionAt(CurrRow, CurrCol);
     /* TODO: Potentially clean up this code somehow later */
