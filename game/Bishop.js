@@ -1,10 +1,18 @@
 const utils = require("./utils");
+const Piece = require("./Piece");
 
 function Bishop(color) {
-  this.id = "B";
-  this.color = color;
+  Piece.call(this, "B", color);
   this.symbol = this.color == "white" ? "\u2657" : "\u265d";
 }
+
+Bishop.prototype = Object.create(Piece.prototype);
+
+Object.defineProperty(Bishop.prototype, "constructor", {
+  value: Bishop,
+  enumerable: false,
+  writable: true
+});
 
 Bishop.prototype.getActions = function(board, row, col) {
   let actions = {

@@ -1,31 +1,29 @@
+const Piece = require("./Piece");
+
 function King(color) {
-  this.id = "K";
-  this.color = color;
+  Piece.call(this, "K", color);
   this.symbol = this.color == "white" ? "\u2654" : "\u265a";
 }
 
-King.prototype.getActions = function(board, row, col) {
-  let actions = {
-    moves: []
-  };
+King.prototype = Object.create(Piece.prototype);
 
-  actions.moves.push([row - 1, col - 1]);
-  actions.moves.push([row - 1, col]);
-  actions.moves.push([row - 1, col + 1]);
-  actions.moves.push([row, col - 1]);
-  actions.moves.push([row, col + 1]);
-  actions.moves.push([row + 1, col - 1]);
-  actions.moves.push([row + 1, col]);
-  actions.moves.push([row + 1, col + 1]);
+Object.defineProperty(King.prototype, "constructor", {
+  value: King,
+  enumerable: false,
+  writable: true
+});
 
-  actions.moves = actions.moves.filter(move => {
-    return (
-      board.isValidPosition(move[0], move[1]) &&
-      board.isEmptyPosition(move[0], move[1])
-    );
-  });
-
-  this.actions = actions;
+King.prototype.getActions = function() {
+  return [
+    [1, 0],
+    [-1, 0],
+    [0, 1],
+    [0, -1],
+    [1, 1],
+    [-1, 1],
+    [1, -1],
+    [-1, -1]
+  ];
 };
 
 module.exports = King;

@@ -1,10 +1,18 @@
 const utils = require("./utils");
+const Piece = require("./Piece");
 
 function Queen(color) {
-  this.id = "Q";
-  this.color = color;
+  Piece.call(this, "Q", color);
   this.symbol = this.color == "white" ? "\u2655" : "\u265b";
 }
+
+Queen.prototype = Object.create(Piece.prototype);
+
+Object.defineProperty(Queen.prototype, "constructor", {
+  value: Queen,
+  enumerable: false,
+  writable: true
+});
 
 Queen.prototype.getActions = function(board, row, col) {
   let moves = [];

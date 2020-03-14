@@ -1,10 +1,18 @@
 const utils = require("./utils");
+const Piece = require("./Piece");
 
 function Rook(color) {
-  this.id = "R";
-  this.color = color;
+  Piece.call("R", color);
   this.symbol = this.color == "white" ? "\u2656" : "\u265c";
 }
+
+Rook.prototype = Object.create(Piece.prototype);
+
+Object.defineProperty(Rook.prototype, "constructor", {
+  value: Rook,
+  enumerable: false,
+  writable: true
+});
 
 Rook.prototype.getActions = function(board, row, col) {
   let moves = [];

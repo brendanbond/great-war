@@ -33,7 +33,6 @@ function Board(grid) {
     [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
     [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
     [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
-    [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
     [
       new Pawn("white"),
       new Pawn("white"),
@@ -110,11 +109,11 @@ Board.prototype.isValidPosition = function(row, col) {
 };
 
 Board.prototype.isEmptyPosition = function(row, col) {
-  return this.positionAt(row, col) === EMPTY;
+  return this.isValidPosition(row, col) && this.positionAt(row, col) === EMPTY;
 };
 
 Board.prototype.isOccupiedPosition = function(row, col) {
-  return !this.isEmptyPosition(row, col);
+  return this.isValidPosition(row, col) && this.positionAt(row, col) !== EMPTY;
 };
 
 module.exports = Board;

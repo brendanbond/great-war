@@ -1,10 +1,18 @@
 const utils = require("./utils");
+const Piece = require("./Piece");
 
 function Knight(color) {
-  this.id = "N";
-  this.color = color;
+  Piece.call(this, "N", color);
   this.symbol = this.color == "white" ? "\u2658" : "\u265e";
 }
+
+Knight.prototype = Object.create(Piece.prototype);
+
+Object.defineProperty(Knight.prototype, "constructor", {
+  value: Knight,
+  enumerable: false,
+  writable: true
+});
 
 Knight.prototype.getActions = function(board, row, col) {
   let moves = [];

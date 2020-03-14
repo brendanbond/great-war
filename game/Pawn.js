@@ -1,9 +1,18 @@
+const Piece = require("./Piece");
+
 function Pawn(color) {
-  this.id = "P";
-  this.color = color;
+  Piece.call(this, "P", color);
   this.symbol = this.color == "white" ? "\u2659" : "\u265f";
   this.opening = true;
 }
+
+Pawn.prototype = Object.create(Piece.prototype);
+
+Object.defineProperty(Pawn.prototype, "constructor", {
+  value: Pawn,
+  enumerable: false,
+  writable: true
+});
 
 Pawn.prototype.getActions = function(board, row, col) {
   let actions = {
