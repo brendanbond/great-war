@@ -1,51 +1,32 @@
 const Board = require("./Board");
 const utils = require("./utils");
-const uuidv4 = require("uuid/v4");
+const shortid = require("shortid");
 
 function Game(grid) {
-  this.id = uuidv4();
+  this.id = shortid();
   this.board = new Board(grid);
 
   this.white = {
-    cards: [],
+    title: "White",
+    user: null,
     captures: [],
     inCheck: false
   };
 
   this.black = {
-    cards: [],
+    title: "Black",
+    user: null,
     captures: [],
     inCheck: false
   };
 
-  this.opening = true;
+  this.inProgress = false;
+  this.isFull = false;
   this.moveNumber = 1;
   this.currentPlayer = this.white;
 
   this.updateBoard();
 }
-
-Game.prototype.reset = function(grid) {
-  this.board = new Board(grid);
-
-  this.white = {
-    cards: [],
-    captures: [],
-    inCheck: false
-  };
-
-  this.black = {
-    cards: [],
-    captures: [],
-    inCheck: false
-  };
-
-  this.opening = true;
-  this.moveNumber = 1;
-  this.currentPlayer = this.white;
-
-  this.updateBoard();
-};
 
 /* update the board with available moves */
 Game.prototype.updateBoard = function() {
@@ -65,7 +46,7 @@ Game.prototype.validateMove = function(row, col, destRow, destCol) {
   let validMove = false;
   let actions = this.board.positionAt(row, col).actions;
 
-  for (move of actions.moves) {
+  for (let move of actions.moves) {
     if (utils.arraysAreEqual([destRow, destCol], move)) {
       validMove = true;
       break;
@@ -73,7 +54,7 @@ Game.prototype.validateMove = function(row, col, destRow, destCol) {
   }
 
   if (actions.attacks && this.board.positionIsOccupied) {
-    for (attack of actions.attacks) {
+    for (let attack of actions.attacks) {
       if (utils.arraysAreEqual([destRow, destCol], attack)) {
         validMove = true;
         break;
@@ -85,7 +66,7 @@ Game.prototype.validateMove = function(row, col, destRow, destCol) {
 };
 
 /* execute a move */
-Game.prototype.executeMove = function(row, col, destRow, destCol) {
+Game.prototype.executeMove = function({ row, col, destRow, destCol }) {
   if (this.validateMove(row, col, destRow, destCol)) {
     let piece = this.board.positionAt(row, col);
 
@@ -109,7 +90,7 @@ Game.prototype.executeMove = function(row, col, destRow, destCol) {
 
     /* update current player */
     this.currentPlayer =
-      this.currentPlayer == this.white ? this.black : this.white;
+      this.currentPlayer === this.white ? this.black : this.white;
 
     this.moveNumber++;
 
@@ -121,8 +102,23 @@ Game.prototype.executeMove = function(row, col, destRow, destCol) {
   }
 };
 
-Game.prototype.getBoardState = function() {
-  return this.board.grid;
+Game.prototype.addPlayer = function(playerId) {
+  if (this.white.user === null) {
+    this.white.user = playerId;
+  } else {
+    this.black.user = playerId;
+    this.isFull = true;
+  }
+};
+
+Game.prototype.prepareForStart = function() {
+  console.log("Game is preparing to start...");
+  if (!this.isFull) {
+    console.log("Game is not full, waiting on another player...");
+    return false;
+  }
+  this.currentPlayer = this.white;
+  return true;
 };
 
 module.exports = Game;

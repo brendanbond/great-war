@@ -2,14 +2,17 @@ const express = require("express");
 const http = require("http");
 const morgan = require("morgan");
 const socketIO = require("socket.io");
-
-const Game = require("../game/Game");
+const {
+  createGame,
+  getGameList,
+  getGameState,
+  gameIsReadyToBegin,
+  requestJoinGame,
+  executeMove
+} = require("./gameLayer");
 
 const app = express();
 const port = process.env.PORT || 5000;
-
-/* TODO: we will likely need an array of game objects to support multiple concurrent games */
-const game = new Game();
 
 app.use(morgan("dev"));
 app.use(express.static("dist"));
@@ -22,21 +25,40 @@ const server = http.createServer(app);
 const io = socketIO(server);
 
 io.on("connection", socket => {
-  console.log("New client connected.");
-  socket.emit("boardUpdate", game.getBoardState());
+  /* When the socket connects, it enters through the lobby */
+  socket.join("lobby");
+  io.to("lobby").emit("listUpdate", getGameList());
 
-  socket.on("executeMove", data => {
-    game.executeMove(data.row, data.col, data.destRow, data.destCol);
-    socket.emit("boardUpdate", game.getBoardState());
+  /* From the lobby, socket can create a game... */
+  socket.on("createGame", () => {
+    createGame();
+    io.to("lobby").emit("listUpdate", getGameList());
   });
 
-  socket.on("reset", () => {
-    game.reset();
-    socket.emit("boardUpdate", game.getBoardState());
+  /* ...or receive info about a game it may want to join... */
+  /* TODO: this might introduce some security issues, e.g. spoofing a socket id */
+  socket.on("getGameState", ({ gameId }) => {
+    io.to(`${socket.id}`).emit("gameState", getGameState(gameId));
+  });
+
+  /* ...or request to join a specific game. */
+  socket.on("requestJoinGame", ({ gameId }) => {
+    console.log(`Socket ${socket.id} has requested to join game ${gameId}.`);
+    requestJoinGame(socket.id, gameId);
+    socket.join(`${gameId}`).leave("lobby");
+    io.to(`${gameId}`).emit("gameState", getGameState(gameId));
+    if (gameIsReadyToBegin(gameId)) {
+      io.to(`${gameId}`).emit("gameIsReadyToBegin");
+    }
+  });
+
+  socket.on("executeMove", ({ gameId, row, col, destRow, destCol }) => {
+    executeMove({ playerId: socket.id, gameId, row, col, destRow, destCol });
+    io.to(`${gameId}`).emit("gameState", getGameState(gameId));
   });
 
   socket.on("disconnect", () => {
-    console.log("Client disconnected.");
+    console.log(`Client ${socket.id} disconnected.`);
   });
 });
 
