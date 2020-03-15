@@ -62,8 +62,8 @@ Board.prototype.defaultSetup = function() {
 Board.prototype.forEachPiece = function(process) {
   for (let row = 0; row < this.nrows(); ++row) {
     for (let col = 0; col < this.ncols(); ++col) {
-      if (this.grid[row][col] !== EMPTY) {
-        process(this.grid[row][col], row, col);
+      if (this.isOccupiedPosition(row, col)) {
+        process(this.positionAt(row, col), row, col);
       }
     }
   }

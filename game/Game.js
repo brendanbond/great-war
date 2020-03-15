@@ -47,24 +47,36 @@ Game.prototype.reset = function() {
   this.updateBoard();
 };
 
+// Return the position of King of given color.
+Game.prototype.findKing = function(color) {
+  let pos = [];
+
+  this.board.forEachPiece((piece, row, col) => {
+    if (piece.id === "K" && piece.color === color) {
+      pos.push(row, col);
+    }
+  });
+
+  return pos;
+};
+
 /* update the board with available moves */
 Game.prototype.updateBoard = function() {
   let wkrow, wkcol, bkrow, bkcol;
+
   this.board.forEachPiece((piece, row, col) => {
-    // Find row and col of Kings.
-    if (piece.id === "K" && piece.color === "white") {
-      wkrow = row;
-      wkcol = col;
-    } else if (piece.id === "K" && piece.color === "black") {
-      bkrow = row;
-      bkcol = col;
-    }
     piece.updateMoves(this.board, row, col);
   });
 
-  // Update Kings last.
-  this.board.positionAt(wkrow, wkcol).updateMoves(this.board, wkrow, wkcol);
-  this.board.positionAt(bkrow, bkcol).updateMoves(this.board, bkrow, bkcol);
+  /* Update Kings last so that they have fully updated check info. */
+  let wkpos = this.findKing("white");
+  let bkpos = this.findKing("black");
+  this.board
+    .positionAt(wkpos[0], wkpos[1])
+    .updateMoves(this.board, wkpos[0], wkpos[1]);
+  this.board
+    .positionAt(bkpos[0], bkpos[1])
+    .updateMoves(this.board, bkpos[0], bkpos[1]);
 };
 
 /* execute a move */
@@ -83,13 +95,19 @@ Game.prototype.executeMove = function(row, col, dstRow, dstCol) {
 
   this.board.setPosition(piece, dstRow, dstCol);
 
-  /* update current player */
+  // For pieces like pawns that change state upon moving.
+  if (piece.move) {
+    piece.move();
+  }
+
+  this.switchPlayer();
+  this.moveNumber++;
+  this.updateBoard();
+};
+
+Game.prototype.switchPlayer = function() {
   this.currentPlayer =
     this.currentPlayer == this.white ? this.black : this.white;
-
-  this.moveNumber++;
-
-  this.updateBoard();
 };
 
 Game.prototype.getBoardState = function() {
