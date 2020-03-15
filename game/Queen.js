@@ -18,7 +18,7 @@ Queen.prototype.updateMoves = function(board, row, col) {
   this.moves = [];
 
   /* down */
-  for (let i = 1; i < board.nRows(); ++i) {
+  for (let i = 1; i < board.nrows(); ++i) {
     if (board.isValidPosition(row + i, col)) {
       if (board.isOccupiedPosition(row + i, col)) {
         let target = board.positionAt(row + i, col);
@@ -32,7 +32,7 @@ Queen.prototype.updateMoves = function(board, row, col) {
   }
 
   /* up */
-  for (let i = 1; i < board.nRows(); ++i) {
+  for (let i = 1; i < board.nrows(); ++i) {
     if (board.isValidPosition(row - i, col)) {
       if (board.isOccupiedPosition(row - i, col)) {
         let target = board.positionAt(row - i, col);
@@ -46,7 +46,7 @@ Queen.prototype.updateMoves = function(board, row, col) {
   }
 
   /* right */
-  for (let i = 1; i < board.nCols(); ++i) {
+  for (let i = 1; i < board.ncols(); ++i) {
     if (board.isValidPosition(row, col + i)) {
       if (board.isOccupiedPosition(row, col + i)) {
         let target = board.positionAt(row, col + i);
@@ -60,7 +60,7 @@ Queen.prototype.updateMoves = function(board, row, col) {
   }
 
   /* left */
-  for (let i = 1; i < board.nCols(); ++i) {
+  for (let i = 1; i < board.ncols(); ++i) {
     if (board.isValidPosition(row, col - i)) {
       if (board.isOccupiedPosition(row, col - i)) {
         let target = board.positionAt(row, col - i);
@@ -74,7 +74,7 @@ Queen.prototype.updateMoves = function(board, row, col) {
   }
 
   /* down and right diagonal */
-  for (let i = 1; i < board.nRows(); ++i) {
+  for (let i = 1; i < board.nrows(); ++i) {
     if (board.isValidPosition(row + i, col + i)) {
       if (board.isOccupiedPosition(row + i, col + i)) {
         let target = board.positionAt(row + i, col + i);
@@ -88,7 +88,7 @@ Queen.prototype.updateMoves = function(board, row, col) {
   }
 
   /* up and left diagonal */
-  for (let i = 1; i < board.nRows(); ++i) {
+  for (let i = 1; i < board.nrows(); ++i) {
     if (board.isValidPosition(row - i, col - i)) {
       if (board.isOccupiedPosition(row - i, col - i)) {
         let target = board.positionAt(row - i, col - i);
@@ -102,7 +102,7 @@ Queen.prototype.updateMoves = function(board, row, col) {
   }
 
   /* down and left diagonal */
-  for (let i = 1; i < board.nRows(); ++i) {
+  for (let i = 1; i < board.nrows(); ++i) {
     if (board.isValidPosition(row + i, col - i)) {
       if (board.isOccupiedPosition(row + i, col - i)) {
         let target = board.positionAt(row + i, col - i);
@@ -116,7 +116,7 @@ Queen.prototype.updateMoves = function(board, row, col) {
   }
 
   /* up and right diagonal */
-  for (let i = 1; i < board.nRows(); ++i) {
+  for (let i = 1; i < board.nrows(); ++i) {
     if (board.isValidPosition(row - i, col + i)) {
       if (board.isOccupiedPosition(row - i, col + i)) {
         let target = board.positionAt(row - i, col + i);

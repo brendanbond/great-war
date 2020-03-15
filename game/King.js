@@ -42,32 +42,32 @@ King.prototype.updateMoves = function(board, row, col) {
     .filter(move => {
       // King can't move if it puts him in check.
       // NOTE: Can we make this more Brendan-style?
-      for (let i = 0; i < board.pieces.length; ++i) {
-        let piece = board.pieces[i];
+      // Handle pieces with different attacks than moves.
+      let isValidMove = true;
 
-        if (piece.killed || !this.isOppositeColor(piece)) {
-          continue;
-        }
-
-        // Handle pieces with different attacks than moves.
-        if (piece.attacks) {
-          for (let j = 0; j < piece.attacks.length; ++j) {
-            let attack = piece.attacks[j];
-            if (Utils.arraysAreEqual(move, attack)) {
-              return false;
+      board.forEachPiece((piece, row, col) => {
+        if (this.isOppositeColor(piece)) {
+          if (piece.attacks) {
+            for (let j = 0; j < piece.attacks.length; ++j) {
+              let attack = piece.attacks[j];
+              if (Utils.arraysAreEqual(move, attack)) {
+                isValidMove = false;
+                break;
+              }
+            }
+          } else {
+            for (let j = 0; j < piece.moves.length; ++j) {
+              let pMove = piece.moves[j];
+              if (Utils.arraysAreEqual(move, pMove)) {
+                isValidMove = false;
+                break;
+              }
             }
           }
-        } else {
-          for (let j = 0; j < piece.moves.length; ++j) {
-            let pMove = piece.moves[j];
-            if (Utils.arraysAreEqual(move, pMove)) {
-              return false;
-            }
-          }
         }
-      }
+      });
 
-      return true;
+      return isValidMove;
     });
 };
 

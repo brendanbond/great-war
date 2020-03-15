@@ -2,9 +2,9 @@ const Board = require("./Board");
 const utils = require("./utils");
 const uuidv4 = require("uuid/v4");
 
-function Game(grid) {
+function Game() {
   this.id = uuidv4();
-  this.board = new Board(grid);
+  this.board = new Board();
 
   this.white = {
     cards: [],
@@ -25,8 +25,8 @@ function Game(grid) {
   this.updateBoard();
 }
 
-Game.prototype.reset = function(grid) {
-  this.board = new Board(grid);
+Game.prototype.reset = function() {
+  this.board = new Board();
 
   this.white = {
     cards: [],
@@ -49,14 +49,22 @@ Game.prototype.reset = function(grid) {
 
 /* update the board with available moves */
 Game.prototype.updateBoard = function() {
-  for (let row = 0; row < this.board.nRows(); ++row) {
-    for (let col = 0; col < this.board.nCols(); ++col) {
-      if (this.board.isOccupiedPosition(row, col)) {
-        let piece = this.board.positionAt(row, col);
-        piece.updateMoves(this.board, row, col);
-      }
+  let wkrow, wkcol, bkrow, bkcol;
+  this.board.forEachPiece((piece, row, col) => {
+    // Find row and col of Kings.
+    if (piece.id === "K" && piece.color === "white") {
+      wkrow = row;
+      wkcol = col;
+    } else if (piece.id === "K" && piece.color === "black") {
+      bkrow = row;
+      bkcol = col;
     }
-  }
+    piece.updateMoves(this.board, row, col);
+  });
+
+  // Update Kings last.
+  this.board.positionAt(wkrow, wkcol).updateMoves(this.board, wkrow, wkcol);
+  this.board.positionAt(bkrow, bkcol).updateMoves(this.board, bkrow, bkcol);
 };
 
 /* execute a move */
@@ -68,16 +76,12 @@ Game.prototype.executeMove = function(row, col, dstRow, dstCol) {
   /* If attacking, add it to current player's captures. */
   if (this.board.isOccupiedPosition(dstRow, dstCol)) {
     let target = this.board.positionAt(dstRow, dstCol);
-    if (utils.areOppositeColors(piece, target)) {
+    if (piece.isOppositeColor(target)) {
       this.currentPlayer.captures.push(this.board.positionAt(dstRow, dstCol));
     }
   }
 
   this.board.setPosition(piece, dstRow, dstCol);
-
-  if (piece.move) {
-    piece.move();
-  }
 
   /* update current player */
   this.currentPlayer =
@@ -85,7 +89,6 @@ Game.prototype.executeMove = function(row, col, dstRow, dstCol) {
 
   this.moveNumber++;
 
-  /* TODO: maybe we just need to update the piece that moved instead of the entire board */
   this.updateBoard();
 };
 

@@ -11,7 +11,6 @@ const EMPTY = -1;
 
 function Board() {
   this.grid = [];
-  this.pieces = [];
   this.defaultSetup();
 }
 
@@ -23,44 +22,54 @@ Board.prototype.defaultSetup = function() {
     }
   }
 
-  this.setPosition(new Rook("black"), 0, 0, true);
-  this.setPosition(new Knight("black"), 0, 1, true);
-  this.setPosition(new Bishop("black"), 0, 2, true);
-  this.setPosition(new Queen("black"), 0, 3, true);
-  this.setPosition(new King("black"), 0, 4, true);
-  this.setPosition(new Bishop("black"), 0, 5, true);
-  this.setPosition(new Knight("black"), 0, 6, true);
-  this.setPosition(new Rook("black"), 0, 7, true);
+  this.setPosition(new Rook("black"), 0, 0);
+  this.setPosition(new Knight("black"), 0, 1);
+  this.setPosition(new Bishop("black"), 0, 2);
+  this.setPosition(new Queen("black"), 0, 3);
+  this.setPosition(new King("black"), 0, 4);
+  this.setPosition(new Bishop("black"), 0, 5);
+  this.setPosition(new Knight("black"), 0, 6);
+  this.setPosition(new Rook("black"), 0, 7);
 
-  this.setPosition(new Pawn("black"), 1, 0, true);
-  this.setPosition(new Pawn("black"), 1, 1, true);
-  this.setPosition(new Pawn("black"), 1, 2, true);
-  this.setPosition(new Pawn("black"), 1, 3, true);
-  this.setPosition(new Pawn("black"), 1, 4, true);
-  this.setPosition(new Pawn("black"), 1, 5, true);
-  this.setPosition(new Pawn("black"), 1, 6, true);
-  this.setPosition(new Pawn("black"), 1, 7, true);
+  this.setPosition(new Pawn("black"), 1, 0);
+  this.setPosition(new Pawn("black"), 1, 1);
+  this.setPosition(new Pawn("black"), 1, 2);
+  this.setPosition(new Pawn("black"), 1, 3);
+  this.setPosition(new Pawn("black"), 1, 4);
+  this.setPosition(new Pawn("black"), 1, 5);
+  this.setPosition(new Pawn("black"), 1, 6);
+  this.setPosition(new Pawn("black"), 1, 7);
 
-  this.setPosition(new Pawn("white"), 6, 0, true);
-  this.setPosition(new Pawn("white"), 6, 1, true);
-  this.setPosition(new Pawn("white"), 6, 2, true);
-  this.setPosition(new Pawn("white"), 6, 3, true);
-  this.setPosition(new Pawn("white"), 6, 4, true);
-  this.setPosition(new Pawn("white"), 6, 5, true);
-  this.setPosition(new Pawn("white"), 6, 6, true);
-  this.setPosition(new Pawn("white"), 6, 7, true);
+  this.setPosition(new Pawn("white"), 6, 0);
+  this.setPosition(new Pawn("white"), 6, 1);
+  this.setPosition(new Pawn("white"), 6, 2);
+  this.setPosition(new Pawn("white"), 6, 3);
+  this.setPosition(new Pawn("white"), 6, 4);
+  this.setPosition(new Pawn("white"), 6, 5);
+  this.setPosition(new Pawn("white"), 6, 6);
+  this.setPosition(new Pawn("white"), 6, 7);
 
-  this.setPosition(new Rook("white"), 7, 0, true);
-  this.setPosition(new Knight("white"), 7, 1, true);
-  this.setPosition(new Bishop("white"), 7, 2, true);
-  this.setPosition(new Queen("white"), 7, 3, true);
-  this.setPosition(new King("white"), 7, 4, true);
-  this.setPosition(new Bishop("white"), 7, 6, true);
-  this.setPosition(new Knight("white"), 7, 5, true);
-  this.setPosition(new Rook("white"), 7, 7, true);
+  this.setPosition(new Rook("white"), 7, 0);
+  this.setPosition(new Knight("white"), 7, 1);
+  this.setPosition(new Bishop("white"), 7, 2);
+  this.setPosition(new Queen("white"), 7, 3);
+  this.setPosition(new King("white"), 7, 4);
+  this.setPosition(new Bishop("white"), 7, 6);
+  this.setPosition(new Knight("white"), 7, 5);
+  this.setPosition(new Rook("white"), 7, 7);
 };
 
-Board.prototype.setPosition = function(piece, row, col, setup) {
+Board.prototype.forEachPiece = function(process) {
+  for (let row = 0; row < this.nrows(); ++row) {
+    for (let col = 0; col < this.ncols(); ++col) {
+      if (this.grid[row][col] !== EMPTY) {
+        process(this.grid[row][col], row, col);
+      }
+    }
+  }
+};
+
+Board.prototype.setPosition = function(piece, row, col) {
   if (!this.isValidPosition(row, col)) {
     throw "Invalid position (" +
       row +
@@ -69,10 +78,6 @@ Board.prototype.setPosition = function(piece, row, col, setup) {
       ") passed to Board#setPosition()";
   }
   this.grid[row][col] = piece;
-
-  if (setup) {
-    this.pieces.push(piece);
-  }
 };
 
 Board.prototype.clearPosition = function(row, col) {
@@ -86,11 +91,11 @@ Board.prototype.clearPosition = function(row, col) {
   this.grid[row][col] = EMPTY;
 };
 
-Board.prototype.nRows = function() {
+Board.prototype.nrows = function() {
   return this.grid.length;
 };
 
-Board.prototype.nCols = function() {
+Board.prototype.ncols = function() {
   return this.grid[0].length;
 };
 
