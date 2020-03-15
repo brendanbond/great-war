@@ -14,8 +14,8 @@ Object.defineProperty(Queen.prototype, "constructor", {
   writable: true
 });
 
-Queen.prototype.getActions = function(board, row, col) {
-  let moves = [];
+Queen.prototype.updateMoves = function(board, row, col) {
+  this.moves = [];
 
   /* down */
   for (let i = 1; i < board.nRows(); ++i) {
@@ -23,11 +23,11 @@ Queen.prototype.getActions = function(board, row, col) {
       if (board.isOccupiedPosition(row + i, col)) {
         let target = board.positionAt(row + i, col);
         if (utils.areOppositeColors(this, target)) {
-          moves.push([row + i, col]);
+          this.moves.push([row + i, col]);
         }
         break;
       }
-      moves.push([row + i, col]);
+      this.moves.push([row + i, col]);
     }
   }
 
@@ -37,11 +37,11 @@ Queen.prototype.getActions = function(board, row, col) {
       if (board.isOccupiedPosition(row - i, col)) {
         let target = board.positionAt(row - i, col);
         if (utils.areOppositeColors(this, target)) {
-          moves.push([row - i, col]);
+          this.moves.push([row - i, col]);
         }
         break;
       }
-      moves.push([row - i, col]);
+      this.moves.push([row - i, col]);
     }
   }
 
@@ -51,11 +51,11 @@ Queen.prototype.getActions = function(board, row, col) {
       if (board.isOccupiedPosition(row, col + i)) {
         let target = board.positionAt(row, col + i);
         if (utils.areOppositeColors(this, target)) {
-          moves.push([row, col + i]);
+          this.moves.push([row, col + i]);
         }
         break;
       }
-      moves.push([row, col + i]);
+      this.moves.push([row, col + i]);
     }
   }
 
@@ -65,11 +65,11 @@ Queen.prototype.getActions = function(board, row, col) {
       if (board.isOccupiedPosition(row, col - i)) {
         let target = board.positionAt(row, col - i);
         if (utils.areOppositeColors(this, target)) {
-          moves.push([row, col - i]);
+          this.moves.push([row, col - i]);
         }
         break;
       }
-      moves.push([row, col - i]);
+      this.moves.push([row, col - i]);
     }
   }
 
@@ -79,11 +79,11 @@ Queen.prototype.getActions = function(board, row, col) {
       if (board.isOccupiedPosition(row + i, col + i)) {
         let target = board.positionAt(row + i, col + i);
         if (utils.areOppositeColors(this, target)) {
-          moves.push([row + i, col + i]);
+          this.moves.push([row + i, col + i]);
         }
         break;
       }
-      moves.push([row + i, col + i]);
+      this.moves.push([row + i, col + i]);
     }
   }
 
@@ -93,11 +93,11 @@ Queen.prototype.getActions = function(board, row, col) {
       if (board.isOccupiedPosition(row - i, col - i)) {
         let target = board.positionAt(row - i, col - i);
         if (utils.areOppositeColors(this, target)) {
-          moves.push([row - i, col - i]);
+          this.moves.push([row - i, col - i]);
         }
         break;
       }
-      moves.push([row - i, col - i]);
+      this.moves.push([row - i, col - i]);
     }
   }
 
@@ -107,11 +107,11 @@ Queen.prototype.getActions = function(board, row, col) {
       if (board.isOccupiedPosition(row + i, col - i)) {
         let target = board.positionAt(row + i, col - i);
         if (utils.areOppositeColors(this, target)) {
-          moves.push([row + i, col - i]);
+          this.moves.push([row + i, col - i]);
         }
         break;
       }
-      moves.push([row + i, col - i]);
+      this.moves.push([row + i, col - i]);
     }
   }
 
@@ -121,15 +121,13 @@ Queen.prototype.getActions = function(board, row, col) {
       if (board.isOccupiedPosition(row - i, col + i)) {
         let target = board.positionAt(row - i, col + i);
         if (utils.areOppositeColors(this, target)) {
-          moves.push([row - i, col + i]);
+          this.moves.push([row - i, col + i]);
         }
         break;
       }
-      moves.push([row - i, col + i]);
+      this.moves.push([row - i, col + i]);
     }
   }
-
-  this.actions = { moves };
 };
 
 module.exports = Queen;

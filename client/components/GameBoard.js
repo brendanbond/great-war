@@ -26,10 +26,10 @@ function GameBoard() {
     } else {
       let piece = board[selectedSquare[0]][selectedSquare[1]];
 
-      for (let i = 0; i < piece.actions.moves.length; i++) {
+      for (let i = 0; i < piece.moves.length; i++) {
         /* if destination is one of possible actions, execute a move */
 
-        let move = piece.actions.moves[i];
+        let move = piece.moves[i];
         if (arraysAreEqual(move, position)) {
           let data = {
             row: selectedSquare[0],

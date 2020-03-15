@@ -7,9 +7,9 @@ function GameRow({ row, rowIndex, handleClick, selectedSquare, board }) {
   const squareIsHighlighted = (row, col) => {
     if (selectedSquare) {
       let piece = board[selectedSquare[0]][selectedSquare[1]];
-      if (piece.actions) {
-        for (let i = 0; i < piece.actions.moves.length; ++i) {
-          if (arraysAreEqual([row, col], piece.actions.moves[i])) {
+      if (piece !== -1) {
+        for (let i = 0; i < piece.moves.length; ++i) {
+          if (arraysAreEqual([row, col], piece.moves[i])) {
             return true;
           }
         }

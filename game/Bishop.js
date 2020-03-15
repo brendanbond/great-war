@@ -14,10 +14,8 @@ Object.defineProperty(Bishop.prototype, "constructor", {
   writable: true
 });
 
-Bishop.prototype.getActions = function(board, row, col) {
-  let actions = {
-    moves: []
-  };
+Bishop.prototype.updateMoves = function(board, row, col) {
+  this.moves = [];
 
   /* down and right diagonal */
   for (let i = 1; i < board.nRows(); ++i) {
@@ -25,11 +23,11 @@ Bishop.prototype.getActions = function(board, row, col) {
       if (board.isOccupiedPosition(row + i, col + i)) {
         let target = board.positionAt(row + i, col + i);
         if (utils.areOppositeColors(this, target)) {
-          actions.moves.push([row + i, col + i]);
+          this.moves.push([row + i, col + i]);
         }
         break;
       }
-      actions.moves.push([row + i, col + i]);
+      this.moves.push([row + i, col + i]);
     }
   }
 
@@ -39,11 +37,11 @@ Bishop.prototype.getActions = function(board, row, col) {
       if (board.isOccupiedPosition(row - i, col - i)) {
         let target = board.positionAt(row - i, col - i);
         if (utils.areOppositeColors(this, target)) {
-          actions.moves.push([row - i, col - i]);
+          this.moves.push([row - i, col - i]);
         }
         break;
       }
-      actions.moves.push([row - i, col - i]);
+      this.moves.push([row - i, col - i]);
     }
   }
 
@@ -53,11 +51,11 @@ Bishop.prototype.getActions = function(board, row, col) {
       if (board.isOccupiedPosition(row + i, col - i)) {
         let target = board.positionAt(row + i, col - i);
         if (utils.areOppositeColors(this, target)) {
-          actions.moves.push([row + i, col - i]);
+          this.moves.push([row + i, col - i]);
         }
         break;
       }
-      actions.moves.push([row + i, col - i]);
+      this.moves.push([row + i, col - i]);
     }
   }
 
@@ -67,15 +65,13 @@ Bishop.prototype.getActions = function(board, row, col) {
       if (board.isOccupiedPosition(row - i, col + i)) {
         let target = board.positionAt(row - i, col + i);
         if (utils.areOppositeColors(this, target)) {
-          actions.moves.push([row - i, col + i]);
+          this.moves.push([row - i, col + i]);
         }
         break;
       }
-      actions.moves.push([row - i, col + i]);
+      this.moves.push([row - i, col + i]);
     }
   }
-
-  this.actions = actions;
 };
 
 module.exports = Bishop;

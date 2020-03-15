@@ -14,17 +14,17 @@ Object.defineProperty(Knight.prototype, "constructor", {
   writable: true
 });
 
-Knight.prototype.getActions = function(board, row, col) {
-  let moves = [];
+Knight.prototype.updateMoves = function(board, row, col) {
+  this.moves = [];
 
   /* down and right */
   if (board.isValidPosition(row + 2, col + 1)) {
     if (board.isOccupiedPosition(row + 2, col + 1)) {
       if (utils.areOppositeColors(row + 2, col + 1)) {
-        moves.push([row + 2, col + 1]);
+        this.moves.push([row + 2, col + 1]);
       }
     } else {
-      moves.push([row + 2, col + 1]);
+      this.moves.push([row + 2, col + 1]);
     }
   }
 
@@ -32,10 +32,10 @@ Knight.prototype.getActions = function(board, row, col) {
   if (board.isValidPosition(row + 2, col - 1)) {
     if (board.isOccupiedPosition(row + 2, col - 1)) {
       if (utils.areOppositeColors(row + 2, col - 1)) {
-        moves.push([row + 2, col - 1]);
+        this.moves.push([row + 2, col - 1]);
       }
     } else {
-      moves.push([row + 2, col - 1]);
+      this.moves.push([row + 2, col - 1]);
     }
   }
 
@@ -43,10 +43,10 @@ Knight.prototype.getActions = function(board, row, col) {
   if (board.isValidPosition(row - 2, col + 1)) {
     if (board.isOccupiedPosition(row - 2, col + 1)) {
       if (utils.areOppositeColors(row - 2, col + 1)) {
-        moves.push([row - 2, col + 1]);
+        this.moves.push([row - 2, col + 1]);
       }
     } else {
-      moves.push([row - 2, col + 1]);
+      this.moves.push([row - 2, col + 1]);
     }
   }
 
@@ -54,10 +54,10 @@ Knight.prototype.getActions = function(board, row, col) {
   if (board.isValidPosition(row - 2, col - 1)) {
     if (board.isOccupiedPosition(row - 2, col - 1)) {
       if (utils.areOppositeColors(row - 2, col - 1)) {
-        moves.push([row - 2, col - 1]);
+        this.moves.push([row - 2, col - 1]);
       }
     } else {
-      moves.push([row - 2, col - 1]);
+      this.moves.push([row - 2, col - 1]);
     }
   }
 
@@ -65,10 +65,10 @@ Knight.prototype.getActions = function(board, row, col) {
   if (board.isValidPosition(row + 1, col + 2)) {
     if (board.isOccupiedPosition(row + 1, col + 2)) {
       if (utils.areOppositeColors(row + 1, col + 2)) {
-        moves.push([row + 1, col + 2]);
+        this.moves.push([row + 1, col + 2]);
       }
     } else {
-      moves.push([row + 1, col + 2]);
+      this.moves.push([row + 1, col + 2]);
     }
   }
 
@@ -76,10 +76,10 @@ Knight.prototype.getActions = function(board, row, col) {
   if (board.isValidPosition(row + 1, col - 2)) {
     if (board.isOccupiedPosition(row + 1, col - 2)) {
       if (utils.areOppositeColors(row + 1, col - 2)) {
-        moves.push([row + 1, col - 2]);
+        this.moves.push([row + 1, col - 2]);
       }
     } else {
-      moves.push([row + 1, col - 2]);
+      this.moves.push([row + 1, col - 2]);
     }
   }
 
@@ -87,10 +87,10 @@ Knight.prototype.getActions = function(board, row, col) {
   if (board.isValidPosition(row - 1, col + 2)) {
     if (board.isOccupiedPosition(row - 1, col + 2)) {
       if (utils.areOppositeColors(row - 1, col + 2)) {
-        moves.push([row - 1, col + 2]);
+        this.moves.push([row - 1, col + 2]);
       }
     } else {
-      moves.push([row - 1, col + 2]);
+      this.moves.push([row - 1, col + 2]);
     }
   }
 
@@ -98,14 +98,12 @@ Knight.prototype.getActions = function(board, row, col) {
   if (board.isValidPosition(row - 1, col - 2)) {
     if (board.isOccupiedPosition(row - 1, col - 2)) {
       if (utils.areOppositeColors(row - 1, col - 2)) {
-        moves.push([row - 1, col - 2]);
+        this.moves.push([row - 1, col - 2]);
       }
     } else {
-      moves.push([row - 1, col - 2]);
+      this.moves.push([row - 1, col - 2]);
     }
   }
-
-  this.actions = { moves };
 };
 
 module.exports = Knight;

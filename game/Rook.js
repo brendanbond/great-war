@@ -2,7 +2,7 @@ const utils = require("./utils");
 const Piece = require("./Piece");
 
 function Rook(color) {
-  Piece.call("R", color);
+  Piece.call(this, "R", color);
   this.symbol = this.color == "white" ? "\u2656" : "\u265c";
 }
 
@@ -14,8 +14,8 @@ Object.defineProperty(Rook.prototype, "constructor", {
   writable: true
 });
 
-Rook.prototype.getActions = function(board, row, col) {
-  let moves = [];
+Rook.prototype.updateMoves = function(board, row, col) {
+  this.moves = [];
 
   /* down */
   for (let i = 1; i < board.nRows(); ++i) {
@@ -23,11 +23,11 @@ Rook.prototype.getActions = function(board, row, col) {
       if (board.isOccupiedPosition(row + i, col)) {
         let target = board.positionAt(row + i, col);
         if (utils.areOppositeColors(this, target)) {
-          moves.push([row + i, col]);
+          this.moves.push([row + i, col]);
         }
         break;
       }
-      moves.push([row + i, col]);
+      this.moves.push([row + i, col]);
     }
   }
 
@@ -37,11 +37,11 @@ Rook.prototype.getActions = function(board, row, col) {
       if (board.isOccupiedPosition(row - i, col)) {
         let target = board.positionAt(row - i, col);
         if (utils.areOppositeColors(this, target)) {
-          moves.push([row - i, col]);
+          this.moves.push([row - i, col]);
         }
         break;
       }
-      moves.push([row - i, col]);
+      this.moves.push([row - i, col]);
     }
   }
 
@@ -51,11 +51,11 @@ Rook.prototype.getActions = function(board, row, col) {
       if (board.isOccupiedPosition(row, col + i)) {
         let target = board.positionAt(row, col + i);
         if (utils.areOppositeColors(this, target)) {
-          moves.push([row, col + i]);
+          this.moves.push([row, col + i]);
         }
         break;
       }
-      moves.push([row, col + i]);
+      this.moves.push([row, col + i]);
     }
   }
 
@@ -65,15 +65,13 @@ Rook.prototype.getActions = function(board, row, col) {
       if (board.isOccupiedPosition(row, col - i)) {
         let target = board.positionAt(row, col - i);
         if (utils.areOppositeColors(this, target)) {
-          moves.push([row, col - i]);
+          this.moves.push([row, col - i]);
         }
         break;
       }
-      moves.push([row, col - i]);
+      this.moves.push([row, col - i]);
     }
   }
-
-  this.actions = { moves };
 };
 
 module.exports = Rook;
