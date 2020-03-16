@@ -14,60 +14,60 @@ Object.defineProperty(Bishop.prototype, "constructor", {
   writable: true
 });
 
-Bishop.prototype.updateMoves = function(board, row, col) {
+Bishop.prototype.updateMoves = function(board) {
   /* down and right diagonal */
   for (let i = 1; i < board.nrows(); ++i) {
-    if (board.isValidPosition(row + i, col + i)) {
-      if (board.isOccupiedPosition(row + i, col + i)) {
-        let target = board.positionAt(row + i, col + i);
+    if (board.isValidPosition(this.row + i, this.col + i)) {
+      if (board.isOccupiedPosition(this.row + i, this.col + i)) {
+        let target = board.positionAt(this.row + i, this.col + i);
         if (utils.areOppositeColors(this, target)) {
-          this.moves.push([row + i, col + i]);
+          this.moves.push([this.row + i, this.col + i]);
         }
         break;
       }
-      this.moves.push([row + i, col + i]);
+      this.moves.push([this.row + i, this.col + i]);
     }
   }
 
   /* up and left diagonal */
   for (let i = 1; i < board.nrows(); ++i) {
-    if (board.isValidPosition(row - i, col - i)) {
-      if (board.isOccupiedPosition(row - i, col - i)) {
-        let target = board.positionAt(row - i, col - i);
+    if (board.isValidPosition(this.row - i, this.col - i)) {
+      if (board.isOccupiedPosition(this.row - i, this.col - i)) {
+        let target = board.positionAt(this.row - i, this.col - i);
         if (utils.areOppositeColors(this, target)) {
-          this.moves.push([row - i, col - i]);
+          this.moves.push([this.row - i, this.col - i]);
         }
         break;
       }
-      this.moves.push([row - i, col - i]);
+      this.moves.push([this.row - i, this.col - i]);
     }
   }
 
   /* down and left diagonal */
   for (let i = 1; i < board.nrows(); ++i) {
-    if (board.isValidPosition(row + i, col - i)) {
-      if (board.isOccupiedPosition(row + i, col - i)) {
-        let target = board.positionAt(row + i, col - i);
+    if (board.isValidPosition(this.row + i, this.col - i)) {
+      if (board.isOccupiedPosition(this.row + i, this.col - i)) {
+        let target = board.positionAt(this.row + i, this.col - i);
         if (utils.areOppositeColors(this, target)) {
-          this.moves.push([row + i, col - i]);
+          this.moves.push([this.row + i, this.col - i]);
         }
         break;
       }
-      this.moves.push([row + i, col - i]);
+      this.moves.push([this.row + i, this.col - i]);
     }
   }
 
   /* up and right diagonal */
   for (let i = 1; i < board.nrows(); ++i) {
-    if (board.isValidPosition(row - i, col + i)) {
-      if (board.isOccupiedPosition(row - i, col + i)) {
-        let target = board.positionAt(row - i, col + i);
+    if (board.isValidPosition(this.row - i, this.col + i)) {
+      if (board.isOccupiedPosition(this.row - i, this.col + i)) {
+        let target = board.positionAt(this.row - i, this.col + i);
         if (utils.areOppositeColors(this, target)) {
-          this.moves.push([row - i, col + i]);
+          this.moves.push([this.row - i, this.col + i]);
         }
         break;
       }
-      this.moves.push([row - i, col + i]);
+      this.moves.push([this.row - i, this.col + i]);
     }
   }
 };

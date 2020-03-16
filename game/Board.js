@@ -63,7 +63,7 @@ Board.prototype.forEachPiece = function(process) {
   for (let row = 0; row < this.nrows(); ++row) {
     for (let col = 0; col < this.ncols(); ++col) {
       if (this.isOccupiedPosition(row, col)) {
-        process(this.positionAt(row, col), row, col);
+        process(this.positionAt(row, col));
       }
     }
   }
@@ -77,6 +77,7 @@ Board.prototype.setPosition = function(piece, row, col) {
       col +
       ") passed to Board#setPosition()";
   }
+  piece.setPosition(row, col);
   this.grid[row][col] = piece;
 };
 
@@ -87,6 +88,9 @@ Board.prototype.clearPosition = function(row, col) {
       ", " +
       col +
       ") passed to Board#clearPosition()";
+  }
+  if (this.isOccupiedPosition(row, col)) {
+    // this.positionAt(row, col).kill();
   }
   this.grid[row][col] = EMPTY;
 };

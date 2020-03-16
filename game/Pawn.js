@@ -15,23 +15,23 @@ Object.defineProperty(Pawn.prototype, "constructor", {
   writable: true
 });
 
-Pawn.prototype.updateMoves = function(board, row, col) {
+Pawn.prototype.updateMoves = function(board) {
   // White moves up, black moves down.
   let k = this.isWhite() ? -1 : 1;
 
   // Add attacks.
-  if (board.isValidPosition(row + k, col + 1)) {
-    this.attacks.push([row + k, col + 1]);
+  if (board.isValidPosition(this.row + k, this.col + 1)) {
+    this.attacks.push([this.row + k, this.col + 1]);
   }
-  if (board.isValidPosition(row + k, col - 1)) {
-    this.attacks.push([row + k, col - 1]);
+  if (board.isValidPosition(this.row + k, this.col - 1)) {
+    this.attacks.push([this.row + k, this.col - 1]);
   }
 
   // Add moves.
-  if (board.isEmptyPosition(row + k, col)) {
-    this.moves.push([row + k, col]);
-    if (this.opening && board.isEmptyPosition(row + 2 * k, col)) {
-      this.moves.push([row + 2 * k, col]);
+  if (board.isEmptyPosition(this.row + k, this.col)) {
+    this.moves.push([this.row + k, this.col]);
+    if (this.opening && board.isEmptyPosition(this.row + 2 * k, this.col)) {
+      this.moves.push([this.row + 2 * k, this.col]);
     }
 
     // If attacks have a valid target, add them to moves.

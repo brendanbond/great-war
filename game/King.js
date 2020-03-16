@@ -25,13 +25,13 @@ King.prototype.offsets = [
   [-1, -1]
 ];
 
-King.prototype.updateMoves = function(board, row, col) {
+King.prototype.updateMoves = function(board) {
   let dstRow, dstCol;
 
   this.moves = this.offsets
     .reduce((moves, offset) => {
-      dstRow = row + offset[0];
-      dstCol = col + offset[1];
+      dstRow = this.row + offset[0];
+      dstCol = this.col + offset[1];
 
       if (board.isEmptyPosition(dstRow, dstCol)) {
         moves.push([dstRow, dstCol]);
@@ -45,7 +45,7 @@ King.prototype.updateMoves = function(board, row, col) {
       // Handle pieces with different attacks than moves.
       let isValidMove = true;
 
-      board.forEachPiece((piece, row, col) => {
+      board.forEachPiece(piece => {
         if (this.isOppositeColor(piece)) {
           // Some pieces have different attacks then moves.
           if (piece.attacks) {

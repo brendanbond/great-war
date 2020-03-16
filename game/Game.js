@@ -1,87 +1,52 @@
 const Board = require("./Board");
+const Player = require("./Player");
+
 const utils = require("./utils");
 const uuidv4 = require("uuid/v4");
 
 function Game() {
   this.id = uuidv4();
-  this.board = new Board();
-
-  this.white = {
-    cards: [],
-    captures: [],
-    inCheck: false
-  };
-
-  this.black = {
-    cards: [],
-    captures: [],
-    inCheck: false
-  };
-
-  this.opening = true;
-  this.moveNumber = 1;
-  this.currentPlayer = this.white;
-
-  this.updateBoard();
+  this.reset();
 }
 
 Game.prototype.reset = function() {
-  this.board = new Board();
-
-  this.white = {
-    cards: [],
-    captures: [],
-    inCheck: false
-  };
-
-  this.black = {
-    cards: [],
-    captures: [],
-    inCheck: false
-  };
-
-  this.opening = true;
-  this.moveNumber = 1;
+  this.white = new Player("white");
+  this.black = new Player("black");
   this.currentPlayer = this.white;
 
-  this.updateBoard();
-};
-
-// Return the position of King of given color.
-Game.prototype.findKing = function(color) {
-  let pos = [];
-
-  this.board.forEachPiece((piece, row, col) => {
-    if (piece.id === "K" && piece.color === color) {
-      pos.push(row, col);
+  // Add pieces to player arrays for quick and easy lookup.
+  this.board = new Board();
+  this.board.forEachPiece(piece => {
+    if (piece.isWhite()) {
+      this.white.addPiece(piece);
+    } else {
+      this.black.addPiece(piece);
     }
   });
 
-  return pos;
+  this.opening = true;
+  this.moveNumber = 1;
+
+  this.updateBoard();
 };
 
 /* update the board with available moves */
 Game.prototype.updateBoard = function() {
-  // King positions.
-  let wkpos = this.findKing("white");
-  let bkpos = this.findKing("black");
-  let wking = this.board.positionAt(wkpos[0], wkpos[1]);
-  let bking = this.board.positionAt(bkpos[0], bkpos[1]);
-
-  this.board.forEachPiece((piece, row, col) => {
+  this.currentPlayer.forEachPiece(piece => {
     piece.clearMoves();
 
     if (!this.currentPlayer.inCheck) {
-      piece.updateMoves(this.board, row, col);
-      if (piece.hasKingInCheck(this.board, row, col)) {
+      piece.updateMoves(this.board);
+      if (piece.hasKingInCheck(this.board)) {
         this.otherPlayer().inCheck = true;
+        console.log(this.otherPlayer());
       }
     }
   });
 
-  /* Update Kings last so that they have fully updated check info. */
-  wking.updateMoves(this.board, wkpos[0], wkpos[1]);
-  bking.updateMoves(this.board, bkpos[0], bkpos[1]);
+  /* Update King last so that they have fully updated check info. */
+  let king = this.currentPlayer.findKing();
+  king.updateMoves(this.board);
 };
 
 /* execute a move */
@@ -94,7 +59,7 @@ Game.prototype.executeMove = function(row, col, dstRow, dstCol) {
   if (this.board.isOccupiedPosition(dstRow, dstCol)) {
     let target = this.board.positionAt(dstRow, dstCol);
     if (piece.isOppositeColor(target)) {
-      this.currentPlayer.captures.push(this.board.positionAt(dstRow, dstCol));
+      this.currentPlayer.addCapture(target);
     }
   }
 
@@ -105,8 +70,9 @@ Game.prototype.executeMove = function(row, col, dstRow, dstCol) {
     piece.move();
   }
 
-  this.switchPlayer();
   this.moveNumber++;
+  this.switchPlayer();
+
   this.updateBoard();
 };
 

@@ -14,92 +14,92 @@ Object.defineProperty(Knight.prototype, "constructor", {
   writable: true
 });
 
-Knight.prototype.updateMoves = function(board, row, col) {
+Knight.prototype.updateMoves = function(board) {
   /* down and right */
-  if (board.isValidPosition(row + 2, col + 1)) {
-    if (board.isOccupiedPosition(row + 2, col + 1)) {
-      if (utils.areOppositeColors(row + 2, col + 1)) {
-        this.moves.push([row + 2, col + 1]);
+  if (board.isValidPosition(this.row + 2, this.col + 1)) {
+    if (board.isOccupiedPosition(this.row + 2, this.col + 1)) {
+      if (utils.areOppositeColors(this.row + 2, this.col + 1)) {
+        this.moves.push([this.row + 2, this.col + 1]);
       }
     } else {
-      this.moves.push([row + 2, col + 1]);
+      this.moves.push([this.row + 2, this.col + 1]);
     }
   }
 
   /* down and left */
-  if (board.isValidPosition(row + 2, col - 1)) {
-    if (board.isOccupiedPosition(row + 2, col - 1)) {
-      if (utils.areOppositeColors(row + 2, col - 1)) {
-        this.moves.push([row + 2, col - 1]);
+  if (board.isValidPosition(this.row + 2, this.col - 1)) {
+    if (board.isOccupiedPosition(this.row + 2, this.col - 1)) {
+      if (utils.areOppositeColors(this.row + 2, this.col - 1)) {
+        this.moves.push([this.row + 2, this.col - 1]);
       }
     } else {
-      this.moves.push([row + 2, col - 1]);
+      this.moves.push([this.row + 2, this.col - 1]);
     }
   }
 
   /* up and right */
-  if (board.isValidPosition(row - 2, col + 1)) {
-    if (board.isOccupiedPosition(row - 2, col + 1)) {
-      if (utils.areOppositeColors(row - 2, col + 1)) {
-        this.moves.push([row - 2, col + 1]);
+  if (board.isValidPosition(this.row - 2, this.col + 1)) {
+    if (board.isOccupiedPosition(this.row - 2, this.col + 1)) {
+      if (utils.areOppositeColors(this.row - 2, this.col + 1)) {
+        this.moves.push([this.row - 2, this.col + 1]);
       }
     } else {
-      this.moves.push([row - 2, col + 1]);
+      this.moves.push([this.row - 2, this.col + 1]);
     }
   }
 
   /* up and left */
-  if (board.isValidPosition(row - 2, col - 1)) {
-    if (board.isOccupiedPosition(row - 2, col - 1)) {
-      if (utils.areOppositeColors(row - 2, col - 1)) {
-        this.moves.push([row - 2, col - 1]);
+  if (board.isValidPosition(this.row - 2, this.col - 1)) {
+    if (board.isOccupiedPosition(this.row - 2, this.col - 1)) {
+      if (utils.areOppositeColors(this.row - 2, this.col - 1)) {
+        this.moves.push([this.row - 2, this.col - 1]);
       }
     } else {
-      this.moves.push([row - 2, col - 1]);
+      this.moves.push([this.row - 2, this.col - 1]);
     }
   }
 
   /* right and down */
-  if (board.isValidPosition(row + 1, col + 2)) {
-    if (board.isOccupiedPosition(row + 1, col + 2)) {
-      if (utils.areOppositeColors(row + 1, col + 2)) {
-        this.moves.push([row + 1, col + 2]);
+  if (board.isValidPosition(this.row + 1, this.col + 2)) {
+    if (board.isOccupiedPosition(this.row + 1, this.col + 2)) {
+      if (utils.areOppositeColors(this.row + 1, this.col + 2)) {
+        this.moves.push([this.row + 1, this.col + 2]);
       }
     } else {
-      this.moves.push([row + 1, col + 2]);
+      this.moves.push([this.row + 1, this.col + 2]);
     }
   }
 
   /* left and down */
-  if (board.isValidPosition(row + 1, col - 2)) {
-    if (board.isOccupiedPosition(row + 1, col - 2)) {
-      if (utils.areOppositeColors(row + 1, col - 2)) {
-        this.moves.push([row + 1, col - 2]);
+  if (board.isValidPosition(this.row + 1, this.col - 2)) {
+    if (board.isOccupiedPosition(this.row + 1, this.col - 2)) {
+      if (utils.areOppositeColors(this.row + 1, this.col - 2)) {
+        this.moves.push([this.row + 1, this.col - 2]);
       }
     } else {
-      this.moves.push([row + 1, col - 2]);
+      this.moves.push([this.row + 1, this.col - 2]);
     }
   }
 
   /* right and up */
-  if (board.isValidPosition(row - 1, col + 2)) {
-    if (board.isOccupiedPosition(row - 1, col + 2)) {
-      if (utils.areOppositeColors(row - 1, col + 2)) {
-        this.moves.push([row - 1, col + 2]);
+  if (board.isValidPosition(this.row - 1, this.col + 2)) {
+    if (board.isOccupiedPosition(this.row - 1, this.col + 2)) {
+      if (utils.areOppositeColors(this.row - 1, this.col + 2)) {
+        this.moves.push([this.row - 1, this.col + 2]);
       }
     } else {
-      this.moves.push([row - 1, col + 2]);
+      this.moves.push([this.row - 1, this.col + 2]);
     }
   }
 
   /* left and up */
-  if (board.isValidPosition(row - 1, col - 2)) {
-    if (board.isOccupiedPosition(row - 1, col - 2)) {
-      if (utils.areOppositeColors(row - 1, col - 2)) {
-        this.moves.push([row - 1, col - 2]);
+  if (board.isValidPosition(this.row - 1, this.col - 2)) {
+    if (board.isOccupiedPosition(this.row - 1, this.col - 2)) {
+      if (utils.areOppositeColors(this.row - 1, this.col - 2)) {
+        this.moves.push([this.row - 1, this.col - 2]);
       }
     } else {
-      this.moves.push([row - 1, col - 2]);
+      this.moves.push([this.row - 1, this.col - 2]);
     }
   }
 };

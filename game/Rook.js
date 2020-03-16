@@ -14,60 +14,60 @@ Object.defineProperty(Rook.prototype, "constructor", {
   writable: true
 });
 
-Rook.prototype.updateMoves = function(board, row, col) {
+Rook.prototype.updateMoves = function(board) {
   /* down */
   for (let i = 1; i < board.nrows(); ++i) {
-    if (board.isValidPosition(row + i, col)) {
-      if (board.isOccupiedPosition(row + i, col)) {
-        let target = board.positionAt(row + i, col);
+    if (board.isValidPosition(this.row + i, this.col)) {
+      if (board.isOccupiedPosition(this.row + i, this.col)) {
+        let target = board.positionAt(this.row + i, this.col);
         if (utils.areOppositeColors(this, target)) {
-          this.moves.push([row + i, col]);
+          this.moves.push([this.row + i, this.col]);
         }
         break;
       }
-      this.moves.push([row + i, col]);
+      this.moves.push([this.row + i, this.col]);
     }
   }
 
   /* up */
   for (let i = 1; i < board.nrows(); ++i) {
-    if (board.isValidPosition(row - i, col)) {
-      if (board.isOccupiedPosition(row - i, col)) {
-        let target = board.positionAt(row - i, col);
+    if (board.isValidPosition(this.row - i, this.col)) {
+      if (board.isOccupiedPosition(this.row - i, this.col)) {
+        let target = board.positionAt(this.row - i, this.col);
         if (utils.areOppositeColors(this, target)) {
-          this.moves.push([row - i, col]);
+          this.moves.push([this.row - i, this.col]);
         }
         break;
       }
-      this.moves.push([row - i, col]);
+      this.moves.push([this.row - i, this.col]);
     }
   }
 
   /* right */
   for (let i = 1; i < board.ncols(); ++i) {
-    if (board.isValidPosition(row, col + i)) {
-      if (board.isOccupiedPosition(row, col + i)) {
-        let target = board.positionAt(row, col + i);
+    if (board.isValidPosition(this.row, this.col + i)) {
+      if (board.isOccupiedPosition(this.row, this.col + i)) {
+        let target = board.positionAt(this.row, this.col + i);
         if (utils.areOppositeColors(this, target)) {
-          this.moves.push([row, col + i]);
+          this.moves.push([this.row, this.col + i]);
         }
         break;
       }
-      this.moves.push([row, col + i]);
+      this.moves.push([this.row, this.col + i]);
     }
   }
 
   /* left */
   for (let i = 1; i < board.ncols(); ++i) {
-    if (board.isValidPosition(row, col - i)) {
-      if (board.isOccupiedPosition(row, col - i)) {
-        let target = board.positionAt(row, col - i);
+    if (board.isValidPosition(this.row, this.col - i)) {
+      if (board.isOccupiedPosition(this.row, this.col - i)) {
+        let target = board.positionAt(this.row, this.col - i);
         if (utils.areOppositeColors(this, target)) {
-          this.moves.push([row, col - i]);
+          this.moves.push([this.row, this.col - i]);
         }
         break;
       }
-      this.moves.push([row, col - i]);
+      this.moves.push([this.row, this.col - i]);
     }
   }
 };

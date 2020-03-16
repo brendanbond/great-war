@@ -1,13 +1,26 @@
 function Piece(id, color) {
   this.id = id;
   this.color = color;
+  this.row = null;
+  this.col = null;
   this.symbol = null;
   this.killed = false;
   this.moves = [];
 }
 
-Piece.prototype.getMoves = function() {
-  throw "getActions has not been implemented for " +
+Piece.prototype.setPosition = function(row, col) {
+  this.row = row;
+  this.col = col;
+};
+
+Piece.prototype.kill = function() {
+  this.row = null;
+  this.col = null;
+  this.killed = true;
+};
+
+Piece.prototype.updateMoves = function() {
+  throw "updateMoves has not been implemented for " +
     this.constructor.name +
     "!!";
 };
@@ -19,14 +32,15 @@ Piece.prototype.clearMoves = function() {
   }
 };
 
-Piece.prototype.hasKingInCheck = function(board, row, col) {
+Piece.prototype.hasKingInCheck = function(board) {
   return this.moves.some(move => {
-    if (board.isOccupiedPosition(row, col)) {
-      let target = board.positionAt(row, col);
+    if (board.isOccupiedPosition(move[0], move[1])) {
+      let target = board.positionAt(move[0], move[1]);
       if (target.isKing() && this.isOppositeColor(target)) {
         return true;
       }
     }
+    return false;
   });
 };
 
