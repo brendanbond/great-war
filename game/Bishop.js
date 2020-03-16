@@ -15,8 +15,6 @@ Object.defineProperty(Bishop.prototype, "constructor", {
 });
 
 Bishop.prototype.updateMoves = function(board, row, col) {
-  this.moves = [];
-
   /* down and right diagonal */
   for (let i = 1; i < board.nrows(); ++i) {
     if (board.isValidPosition(row + i, col + i)) {

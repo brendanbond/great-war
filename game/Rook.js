@@ -15,8 +15,6 @@ Object.defineProperty(Rook.prototype, "constructor", {
 });
 
 Rook.prototype.updateMoves = function(board, row, col) {
-  this.moves = [];
-
   /* down */
   for (let i = 1; i < board.nrows(); ++i) {
     if (board.isValidPosition(row + i, col)) {

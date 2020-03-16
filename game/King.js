@@ -47,12 +47,13 @@ King.prototype.updateMoves = function(board, row, col) {
 
       board.forEachPiece((piece, row, col) => {
         if (this.isOppositeColor(piece)) {
+          // Some pieces have different attacks then moves.
           if (piece.attacks) {
             for (let j = 0; j < piece.attacks.length; ++j) {
               let attack = piece.attacks[j];
               if (Utils.arraysAreEqual(move, attack)) {
                 isValidMove = false;
-                break;
+                return;
               }
             }
           } else {
@@ -60,7 +61,7 @@ King.prototype.updateMoves = function(board, row, col) {
               let pMove = piece.moves[j];
               if (Utils.arraysAreEqual(move, pMove)) {
                 isValidMove = false;
-                break;
+                return;
               }
             }
           }

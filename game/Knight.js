@@ -15,8 +15,6 @@ Object.defineProperty(Knight.prototype, "constructor", {
 });
 
 Knight.prototype.updateMoves = function(board, row, col) {
-  this.moves = [];
-
   /* down and right */
   if (board.isValidPosition(row + 2, col + 1)) {
     if (board.isOccupiedPosition(row + 2, col + 1)) {

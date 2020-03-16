@@ -62,21 +62,26 @@ Game.prototype.findKing = function(color) {
 
 /* update the board with available moves */
 Game.prototype.updateBoard = function() {
-  let wkrow, wkcol, bkrow, bkcol;
+  // King positions.
+  let wkpos = this.findKing("white");
+  let bkpos = this.findKing("black");
+  let wking = this.board.positionAt(wkpos[0], wkpos[1]);
+  let bking = this.board.positionAt(bkpos[0], bkpos[1]);
 
   this.board.forEachPiece((piece, row, col) => {
-    piece.updateMoves(this.board, row, col);
+    piece.clearMoves();
+
+    if (!this.currentPlayer.inCheck) {
+      piece.updateMoves(this.board, row, col);
+      if (piece.hasKingInCheck(this.board, row, col)) {
+        this.otherPlayer().inCheck = true;
+      }
+    }
   });
 
   /* Update Kings last so that they have fully updated check info. */
-  let wkpos = this.findKing("white");
-  let bkpos = this.findKing("black");
-  this.board
-    .positionAt(wkpos[0], wkpos[1])
-    .updateMoves(this.board, wkpos[0], wkpos[1]);
-  this.board
-    .positionAt(bkpos[0], bkpos[1])
-    .updateMoves(this.board, bkpos[0], bkpos[1]);
+  wking.updateMoves(this.board, wkpos[0], wkpos[1]);
+  bking.updateMoves(this.board, bkpos[0], bkpos[1]);
 };
 
 /* execute a move */
@@ -105,9 +110,12 @@ Game.prototype.executeMove = function(row, col, dstRow, dstCol) {
   this.updateBoard();
 };
 
+Game.prototype.otherPlayer = function() {
+  return this.currentPlayer === this.white ? this.black : this.white;
+};
+
 Game.prototype.switchPlayer = function() {
-  this.currentPlayer =
-    this.currentPlayer == this.white ? this.black : this.white;
+  this.currentPlayer = this.otherPlayer();
 };
 
 Game.prototype.getBoardState = function() {
